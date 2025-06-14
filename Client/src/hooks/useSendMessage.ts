@@ -12,7 +12,6 @@ async function sendMessage({ model, provider, messages, chatId }: any) {
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/model?model=${model}&provider=${provider}&chatid=${chatId}`, {
         method: "POST",
-        credentials: 'include',
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${data.session?.access_token}`
