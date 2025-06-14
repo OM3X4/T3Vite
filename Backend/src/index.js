@@ -14,11 +14,11 @@ const app = express();
 
 
 const corsOptions = {
-    origin: ["https://oaichat.netlify.app"],
-    credentials: true,
+  origin: ["https://oaichat.netlify.app"],
+  credentials: true,
 }
 
-app.use(cors(corsOptions))
+app.use(cors())
 
 
 app.use(cookieParser());
