@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "./supabaseClient";
+import { useNavigate } from "react-router";
 
 async function sendMessage({ model, provider, messages, chatId }: any) {
 
@@ -27,6 +28,7 @@ async function sendMessage({ model, provider, messages, chatId }: any) {
                 onClick: () => window.open("https://openrouter.ai/", "_blank"),
             },
         })
+        throw new Error("499")
     }
 
     if (response.status === 402) {
@@ -45,6 +47,9 @@ async function sendMessage({ model, provider, messages, chatId }: any) {
 }
 
 export default function useSendMessage(onSuccessCallback?: any) {
+
+    const navigate = useNavigate()
+
     return useMutation({
         mutationFn: ({ model, provider, messages, chatId }: any) => sendMessage({ model, provider, messages, chatId }),
         onSuccess: (data) => {
@@ -54,6 +59,9 @@ export default function useSendMessage(onSuccessCallback?: any) {
         },
         onError: (error) => {
             console.log(error)
+            if(error?.message === "499"){
+                navigate("/settings?apikey=1")
+            }
         }
     })
 }

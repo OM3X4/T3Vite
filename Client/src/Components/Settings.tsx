@@ -1,15 +1,32 @@
 import { FiLogOut } from "react-icons/fi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import useUserData from '../hooks/useUserData'
 import Loading from './loading'
 import useUpdateData from '../hooks/useUpdateData'
 import useUpdateKey from '../hooks/useUpdateKey'
 import { Link } from "react-router";
 import { supabase } from "../hooks/supabaseClient";
+import { useSearchParams } from "react-router";
+import clsx from "clsx";
 
 function Settings() {
 
+    const [searchParams] = useSearchParams()
+    const apiKeyRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        // Scroll to the element when the component mounts
+        if(searchParams.get("apikey")){
+            setTimeout(() => {
+                apiKeyRef.current?.scrollIntoView({
+                    behavior: "smooth", // or "auto"
+                    block: "end",     // or "center", "end", "nearest"
+                    inline: "nearest"
+                });
+            } , 300)
+        }
+    }, []);
 
     const { data: userData, isLoading } = useUserData()
     const { mutate: updateUserData } = useUpdateData()
@@ -101,11 +118,13 @@ function Settings() {
                 <div>
                     <h1 className='font-semibold mb-2'>You'll need an OpenRouter key to chat — don't worry, it's easy! No key yet? Click here to get one.<a className="text-primaryme" href='https://openrouter.ai/' target='_blank'>Don't have one</a></h1>
                     <div className='relative'>
-                        <input
+                        <input ref={apiKeyRef}
                             placeholder="Paste your OpenRouter API key (stored securely) 🔐"
                             value={InputData.apiKey} type='text'
                             onChange={(e) => setInputData({ ...InputData, apiKey: e.target.value })}
-                            className='border-2 border-grayme/50 w-full rounded-md p-2 focus:outline-none focus:border-primaryme selection:bg-primaryme py-4' />
+                            className={clsx("border-2 border-grayme/50 w-full rounded-md p-2 focus:outline-none focus:border-primaryme selection:bg-primaryme py-4", {
+                                "border-red-500": searchParams.get("apikey")
+                            })} />
                         <button
                             onClick={() => updateKey(InputData.apiKey)}
                             className='absolute right-2 top-1/2 -translate-y-1/2 border-2 px-2 py-1 border-primaryme text-primaryme rounded-sm cursor-pointer text-center hover:bg-primaryme hover:text-white'>Save</button>
