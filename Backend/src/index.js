@@ -12,12 +12,21 @@ dotenv.config()
 
 const app = express();
 
+
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://oaichat.netlify.app"
+];
+
 app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Set-Cookie']
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true, // only if you're using cookies or Authorization headers
 }));
 app.use(cookieParser());
 
