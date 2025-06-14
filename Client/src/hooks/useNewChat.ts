@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "./supabaseClient";
 
-async function CreateNewChat(message: any) {
+async function CreateNewChat() {
 
     const { data } = await supabase.auth.getSession()
 
@@ -12,16 +12,14 @@ async function CreateNewChat(message: any) {
         }
     })
     const resChatId = await newChatResponse.json()
-    const chatId = resChatId.chatid
 
-    window.location.href = `/c/${chatId}?message=${message}`
+    return resChatId
 }
 
-export default function useNewChat({ onSuccessCallback }: { onSuccessCallback: (data: any) => void }) {
+export default function useNewChat() {
     return useMutation({
-        mutationFn: (message: any) => CreateNewChat( message ),
-        onSuccess: (data) => {
-            onSuccessCallback(data)
+        mutationFn: () => CreateNewChat(),
+        onSuccess: () => {
         },
         onError: () => {
             console.log("Error creating new chat")

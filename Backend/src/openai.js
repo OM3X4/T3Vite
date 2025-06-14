@@ -65,6 +65,7 @@ router.post("/", authenticateJWT, async (req, res) => {
             }
         })
 
+
         if (!chat.title) {
             const firstUserMessage = userMessages.find(m => m.role === 'user')?.content;
 
@@ -136,7 +137,6 @@ router.get("/new", authenticateJWT, async (req, res) => {
 
         res.json({ chatid: chat.id });
     } catch (err) {
-        console.log("err she bad : ", err)
         console.error(err);
         res.status(500).json({ error: "Internal server error" });
     }

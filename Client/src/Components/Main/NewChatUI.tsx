@@ -6,7 +6,7 @@ import { GiWhaleTail } from "react-icons/gi";
 import  { useState, useEffect } from 'react'
 import clsx from "clsx";
 import useGetChats from "../../hooks/useGetChats";
-import useNewChat from "../../hooks/useNewChatMessage";
+import useNewChat from "../../hooks/useNewChat";
 import { supabase } from "../../hooks/supabaseClient";
 import SideBar from "../SideBar";
 import Loading from "../loading";

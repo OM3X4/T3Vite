@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router'
 import useUserData from "../hooks/useUserData";
 
 
-function SideBar({ isOpen , setIsOpen }: any) {
+function SideBar({ isOpen , setIsOpen , ResetChat }: any) {
 
 	const navigate = useNavigate()
 	const { data: chatsData, isLoading: isLoadingChats, isError: isErrorChats } = useGetChats()
@@ -31,7 +31,7 @@ function SideBar({ isOpen , setIsOpen }: any) {
 				</div>
 				<div className="overflow-scroll chat-container pt-5">
 					<button
-						onClick={() => navigate('/')}
+						onClick={() => {ResetChat();navigate('/')}}
 						className="w-full flex items-center mb-4 p-2 gap-2 text-white text-sm hover:bg-white/20 cursor-pointer rounded-md"><FaPenToSquare />New Chat</button>
 					<p className="text-grayme text-sm p-2">Chats</p>
 					<div className="flex flex-col gap-3">

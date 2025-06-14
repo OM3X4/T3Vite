@@ -1,0 +1,222 @@
+/* eslint-disable */
+import { useState, useEffect, useRef } from 'react'
+import type { MessageFetched } from '../../Types/Types';
+import useNewChat from '../../hooks/useNewChat';
+import useSendMessage from '../../hooks/useSendMessage';
+import { BsLayoutSidebarInset } from "react-icons/bs";
+import { SiOpenai } from "react-icons/si";
+import { BsGoogle } from "react-icons/bs";
+import { GiWhaleTail } from "react-icons/gi";
+import clsx from 'clsx';
+import SideBar from '../SideBar';
+import { useParams } from 'react-router';
+import MessageInput from '../MessageInput';
+import useChatMessages from '../../hooks/useChatMessages';
+import MessagesInNewChat from '../MessagesInNewChat';
+import MessagesInNormal from '../MessagesInNormal';
+import { supabase } from '../../hooks/supabaseClient';
+
+const models = [
+    {
+        model: "deepseek-r1-0528:free",
+        provider: "deepseek",
+        name: "DeepSeek R1",
+        icon: <GiWhaleTail />
+    },
+    {
+        model: "gemini-2.0-flash-001",
+        provider: "google",
+        name: "Gemini 2.0 Flash",
+        icon: <BsGoogle />
+    },
+    {
+        model: "gemini-2.5-flash-preview-05-20",
+        provider: "google",
+        name: "Gemini 2.5 Flash",
+        icon: <BsGoogle />
+    },
+    {
+        model: "gpt-4.1-nano",
+        provider: "openai",
+        name: "GPT 4.1 Nano",
+        icon: <SiOpenai />
+    },
+    {
+        model: "gpt-4o-mini",
+        provider: "openai",
+        name: "GPT 4o Mini",
+        icon: <SiOpenai />
+    },
+
+]
+
+
+
+
+function ChatPage() {
+    const { chatId: chatIdFromParams } = useParams();
+
+
+    const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false)
+    const [chatId, setChatId] = useState(null)
+    const [messages, setMessages] = useState<MessageFetched[]>([])
+    const [isSideBarOpen, setIsSideBarOpen] = useState(true)
+    const [message, setMessage] = useState("")
+
+
+    //ref for scrolling
+    const messagesRefForScrolling = useRef<HTMLDivElement>(null)
+
+
+    // scroll to message ref on messages change
+    useEffect(() => {
+        messagesRefForScrolling.current?.scrollIntoView({ behavior: "smooth" })
+    }, [messages])
+
+
+    //setting the chat id if it exist in the params
+    useEffect(() => {
+        if (chatIdFromParams) {
+            setChatId(chatIdFromParams as any);
+            refetchChatHistory()
+        }
+    }, [chatIdFromParams]);
+
+    const [modelProviderName, setModelProviderName] = useState({
+        model: "gemini-2.0-flash-001",
+        provider: "google",
+        name: "Gemini 2.0 Flash",
+        icon: <BsGoogle />
+    },)
+
+    const { data: fetchedMessages, refetch: refetchChatHistory, isLoading: isLoadingFetchedMessages } = useChatMessages(chatId)
+
+    useEffect(() => {
+        if (fetchedMessages && !isLoadingNewMessage) {
+            setMessages(fetchedMessages)
+        }
+    }, [fetchedMessages])
+
+    const { mutate: sendMessageToBackend } = useSendMessage(
+        (data: any) => {
+            const tempIdResponse = crypto.randomUUID();
+
+            const tempResponse = {
+                id: tempIdResponse,
+                role: "assistant",
+                content: data.message,
+                createdAt: new Date().toISOString(),
+            };
+
+            setMessages((prevMessages) => ([...prevMessages, tempResponse] as any))
+            setIsLoadingNewMessage(false)
+        }
+    )
+
+    const { mutate: createNewChat } = useNewChat();
+
+    useEffect(() => {
+        const hash = window.location.hash.substr(1) // remove '#'
+        const params = new URLSearchParams(hash)
+
+        const access_token = params.get('access_token')
+        const refresh_token = params.get('refresh_token')
+
+        if (access_token && refresh_token) {
+            supabase.auth.setSession({
+                access_token,
+                refresh_token,
+            }).then(({ error }) => {
+                if (error) console.error('Error setting session:', error)
+                else console.log('User logged in!')
+
+                // Optional: clean the URL
+                window.history.replaceState({}, document.title, '/')
+            })
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log(messages)
+    }, [messages])
+
+    function handleSend() {
+        setIsLoadingNewMessage(true)
+        if (message === '') {
+            setIsLoadingNewMessage(false)
+            return;
+        }
+
+        const userMessage = {
+            id: crypto.randomUUID(),
+            role: "user",
+            content: message,
+            createdAt: new Date().toISOString()
+        };
+        console.log(messages)
+        const messagesToSend = [...messages, (userMessage as MessageFetched)]
+
+        setMessages(prev => [...prev, (userMessage as MessageFetched)]);
+        setMessage("")
+
+        if (!chatId) {
+            // Create a new chat first
+            createNewChat(undefined, {
+                onSuccess: (data) => {
+                    setChatId(data.chatid);
+                    sendMessageToBackend({
+                        model: modelProviderName.model,
+                        provider: modelProviderName.provider,
+                        chatId: data.chatid,
+                        messages: messagesToSend
+                    });
+                }
+            });
+        } else {
+            // Chat already exists — just send message
+            sendMessageToBackend({
+                model: modelProviderName.model,
+                provider: modelProviderName.provider,
+                chatId: chatId,
+                messages: messagesToSend
+            });
+        }
+    }
+
+    function ResetChat() {
+        setMessages([])
+        setChatId(null)
+        setMessage("")
+    }
+
+    return (
+        <div className='bg-backgroundme h-screen flex items-center justify-center'>
+            {/* SideBar Opener */}
+            <BsLayoutSidebarInset className={clsx("z-50 text-xl absolute top-5 left-5 cursor-pointer hover:text-primaryme text-white", {
+                "hidden": isSideBarOpen
+            })}
+                onClick={() => setIsSideBarOpen(prev => !prev)} />
+            <SideBar isOpen={isSideBarOpen} setIsOpen={setIsSideBarOpen} ResetChat={ResetChat} />
+            {/* Main section */}
+            <div className="flex-[5] flex flex-col items-center justify-center relative h-screen">
+                {/* Messages */}
+                {
+                    (messages && messages.length) || isLoadingFetchedMessages ?
+                        <MessagesInNormal isLoadingFetchedMessages={isLoadingFetchedMessages} messages={messages} fetchedMessages={fetchedMessages} />
+                        :
+                        <MessagesInNewChat setMessage={setMessage} message={message} />
+                }
+                <MessageInput
+                    isLoadingNewMessage={isLoadingNewMessage}
+                    handleMessageSent={handleSend}
+                    models={models}
+                    modelProviderName={modelProviderName}
+                    setModelProviderName={setModelProviderName}
+                    message={message}
+                    setMessage={setMessage} />
+            </div>
+        </div>
+    )
+}
+
+export default ChatPage

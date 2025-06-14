@@ -17,6 +17,7 @@ async function getChats(chatId : any){
 export default function useChatMessages(chatId : any){
     return useQuery({
         queryKey: ["chats" , chatId],
-        queryFn: () => getChats(chatId)
+        queryFn: () => getChats(chatId),
+        enabled: typeof chatId === "string"
     })
 }

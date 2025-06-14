@@ -5,6 +5,7 @@ import { supabase } from "./supabaseClient";
 async function sendMessage({ model, provider, messages, chatId }: any) {
 
     console.log("hi we are sending a message")
+    console.log("messages : " , messages)
     const { data } = await supabase.auth.getSession()
 
 
@@ -39,14 +40,17 @@ async function sendMessage({ model, provider, messages, chatId }: any) {
     }
 
     const res = await response.json()
+    console.log("res : " , res)
     return res;
 }
 
-export default function useSendMessage({ onSuccessCallback }: any) {
+export default function useSendMessage(onSuccessCallback?: any) {
     return useMutation({
         mutationFn: ({ model, provider, messages, chatId }: any) => sendMessage({ model, provider, messages, chatId }),
         onSuccess: (data) => {
-            onSuccessCallback(data)
+            if(onSuccessCallback){
+                onSuccessCallback(data)
+            }
         },
         onError: (error) => {
             console.log(error)
