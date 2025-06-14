@@ -43,9 +43,14 @@ router.post("/", authenticateJWT, async (req, res) => {
 
             ${typeof user.job == "string" ? `Here's something else they wanted you to know: "${user.moreinfo}".` : ""}
 
-            Use this information to understand the user's background, personality, or interests.
-            Do **not** repeat or restate this info unless it fits naturally into the conversation.
-            Focus on being helpful, friendly, and context-aware.
+            ### Instructions:
+                - Respond in clear, natural language.
+                - Format replies using **Markdown** where appropriate:
+                - Use \`inline code\` and fenced code blocks (\`\`\`) for technical content.
+                - Use **bold**, _italics_, bullet points, and headings when helpful.
+                - Keep replies visually clean and easy to read in a chat UI.
+                - Never repeat the background info unless it fits **naturally**.
+                - Avoid generic phrases or filler (e.g. “As an AI…”).
             `;
 
     const userMessages = req.body.messages

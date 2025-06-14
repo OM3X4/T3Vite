@@ -92,9 +92,12 @@ function ChatPage() {
     const { data: fetchedMessages, refetch: refetchChatHistory, isLoading: isLoadingFetchedMessages } = useChatMessages(chatId)
 
     useEffect(() => {
-        if (fetchedMessages && !isLoadingNewMessage) {
+        if (Array.isArray(fetchedMessages) && !isLoadingNewMessage) {
+            console.log(fetchedMessages)
             setMessages(fetchedMessages)
+            return
         }
+        console.log("didn't use message" , fetchedMessages)
     }, [fetchedMessages])
 
     const { mutate: sendMessageToBackend } = useSendMessage(
@@ -107,7 +110,7 @@ function ChatPage() {
                 content: data.message,
                 createdAt: new Date().toISOString(),
             };
-
+            console.log([...messages, (tempResponse as MessageFetched)])
             setMessages((prevMessages) => ([...prevMessages, tempResponse] as any))
             setIsLoadingNewMessage(false)
         }
@@ -136,9 +139,7 @@ function ChatPage() {
         }
     }, [])
 
-    useEffect(() => {
-        console.log(messages)
-    }, [messages])
+
 
     function handleSend() {
         setIsLoadingNewMessage(true)
@@ -153,9 +154,9 @@ function ChatPage() {
             content: message,
             createdAt: new Date().toISOString()
         };
-        console.log(messages)
         const messagesToSend = [...messages, (userMessage as MessageFetched)]
 
+        console.log([...messages, (userMessage as MessageFetched)])
         setMessages(prev => [...prev, (userMessage as MessageFetched)]);
         setMessage("")
 

@@ -11,7 +11,10 @@ async function getChats(chatId : any){
             "Authorization": `Bearer ${data.session?.access_token}`
         },
     })
-    return response.json()
+
+    const res = response.json()
+
+    return res;
 }
 
 export default function useChatMessages(chatId : any){
