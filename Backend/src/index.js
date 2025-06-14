@@ -14,20 +14,18 @@ const app = express();
 
 
 const allowedOrigins = [
-    "http://localhost:3000",
-    "https://oaichat.netlify.app"
+    "https://oaichat.netlify.app",
+    "http://localhost:3000"
 ];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error("Blocked by CORS"));
     },
-    credentials: true, // only if you're using cookies or Authorization headers
+    credentials: true,
 }));
+
 app.use(cookieParser());
 
 app.use(express.json());
