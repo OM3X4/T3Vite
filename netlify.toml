@@ -1,2 +1,6 @@
 [build]
   base = "Client"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
