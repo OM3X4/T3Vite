@@ -14,6 +14,9 @@ import useChatMessages from '../../hooks/useChatMessages';
 import MessagesInNewChat from '../MessagesInNewChat';
 import MessagesInNormal from '../MessagesInNormal';
 import { supabase } from '../../hooks/supabaseClient';
+import useUserData from '../../hooks/useUserData';
+import Loading from '../Loading';
+import useGetChats from '../../hooks/useGetChats';
 
 const models = [
     {
@@ -90,6 +93,10 @@ function ChatPage() {
 
     const { data: fetchedMessages, refetch: refetchChatHistory, isLoading: isLoadingFetchedMessages } = useChatMessages(chatId)
 
+    const {isLoading: isLoadingUserData} = useUserData()
+    const {isLoading: isLoadingUserChat} = useGetChats()
+
+
     useEffect(() => {
         if (Array.isArray(fetchedMessages) && !isLoadingNewMessage) {
             console.log(fetchedMessages)
@@ -137,6 +144,8 @@ function ChatPage() {
             })
         }
     }, [])
+
+    if(isLoadingUserChat || isLoadingUserData || (isLoadingFetchedMessages && !fetchedMessages)) return <Loading />
 
 
 
