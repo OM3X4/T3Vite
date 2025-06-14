@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react'
 import type { MessageFetched } from '../../Types/Types';
 import useNewChat from '../../hooks/useNewChat';
 import useSendMessage from '../../hooks/useSendMessage';
-import { BsLayoutSidebarInset } from "react-icons/bs";
 import { SiOpenai } from "react-icons/si";
 import { BsGoogle } from "react-icons/bs";
 import { GiWhaleTail } from "react-icons/gi";
