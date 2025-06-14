@@ -37,11 +37,11 @@ router.post("/", authenticateJWT, async (req, res) => {
     const systemPrompt = `
             You are a helpful, conversational AI assistant called "oAI".
 
-            You're chatting with someone who prefers to be called "${user.inchatname}".
+            ${typeof user.job == "string" ? `You're chatting with someone who prefers to be called "${user.inchatname}".` : ""}
 
-            They describe what they do as: "${user.job}".
+            ${typeof user.job == "string" ? `They describe what they do as: "${user.job}".` : ""}
 
-            Here's something else they wanted you to know: "${user.moreinfo}".
+            ${typeof user.job == "string" ? `Here's something else they wanted you to know: "${user.moreinfo}".` : ""}
 
             Use this information to understand the user's background, personality, or interests.
             Do **not** repeat or restate this info unless it fits naturally into the conversation.
