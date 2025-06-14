@@ -8,6 +8,45 @@
   --color-secondryme: #192335;
   --color-backgroundme: #10192b;
   --color-grayme: #8e9db2;
+  --color-backgroundgray: #424242;
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chat-container {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent; /* For Firefox */
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 4px; /* thinner scrollbar */
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-item {
+  animation-name: scaleIn;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+  opacity: 0; /* default state before animation */
+  transform: scale(0.95);
 }
 
 @layer base {

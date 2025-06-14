@@ -13,21 +13,24 @@ export default function MessagesInNormal({ isLoadingFetchedMessages , messages, 
 
 
     return (
-        <div className="flex flex-col gap-10 w-full mx-auto py-10 px-[15vw] overflow-y-auto h-full">
+        <div className="flex flex-col w-full md:w-3/4 text-wrap mx-auto py-10 px-3 overflow-y-auto h-full chat-container">
             {
                 isLoadingFetchedMessages || !fetchedMessages ?
                     <MessageLoading />
                     :
-                    messages.map((message: any) => {
+                    messages.map((message: any , index: number) => {
                         return (
-                            <ChatMessage key={message.id} message={message} />
+                            <>
+                                {index === messages.length - 1 && <div ref={messagesRefForScrolling}></div>}
+                                <ChatMessage key={message.id} message={message} />
+                            </>
                         )
                     })
             }
             {
                 !(isLoadingFetchedMessages || !fetchedMessages) && ((messages as any).at(-1) as any)?.role === "user" && <div><MessageLoading /></div>
             }
-            <div ref={messagesRefForScrolling}></div>
+
         </div>
     )
 }

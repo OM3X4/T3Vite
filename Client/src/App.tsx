@@ -27,7 +27,7 @@ function App() {
 
 
 	return (
-		<div className="bg-backgroundme w-screen min-h-screen">
+		<div className="bg-backgroundme w-screen overflow-x-hidden min-h-screen">
 			<Toaster richColors position="top-right"/>
 			<Routes>
 				<Route element={<ChatPage />} path="/c/:chatId" />

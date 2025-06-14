@@ -191,15 +191,22 @@ function ChatPage() {
     }
 
     return (
-        <div className='bg-backgroundme h-screen flex items-center justify-center'>
+        <div className={clsx("bg-backgroundme h-screen w-screen", {
+            "lg:flex": isSideBarOpen,
+            "flex": !isSideBarOpen
+        })}>
             {/* SideBar Opener */}
-            <BsLayoutSidebarInset className={clsx("z-50 text-xl absolute top-5 left-5 cursor-pointer hover:text-primaryme text-white", {
+            {/* <BsLayoutSidebarInset className={clsx("z-50 text-xl absolute top-5 left-5 cursor-pointer hover:text-primaryme text-white", {
                 "hidden": isSideBarOpen
             })}
-                onClick={() => setIsSideBarOpen(prev => !prev)} />
+                onClick={() => setIsSideBarOpen(prev => !prev)} /> */}
             <SideBar isOpen={isSideBarOpen} setIsOpen={setIsSideBarOpen} ResetChat={ResetChat} />
             {/* Main section */}
-            <div className="flex-[5] flex flex-col items-center justify-center relative h-screen">
+            <div className={clsx("w-full flex flex-col items-center justify-center relative h-screen" , {
+                "scale-0 w-0 opacity-0 lg:opacity-100 lg:w-full lg:scale-100": isSideBarOpen
+            })}>
+                {/* Chat Header */}
+                <div className='w-full h-1/6 border-b border-grayme border-opacity-40'></div>
                 {/* Messages */}
                 {
                     (messages && messages.length) || isLoadingFetchedMessages ?
