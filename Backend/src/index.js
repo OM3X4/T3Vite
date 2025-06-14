@@ -13,18 +13,13 @@ dotenv.config()
 const app = express();
 
 
-const allowedOrigins = [
-    "https://oaichat.netlify.app",
-    "http://localhost:3000"
-];
-
-app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-        return callback(new Error("Blocked by CORS"));
-    },
+const corsOptions = {
+    origin: ["https://oaichat.netlify.app"],
     credentials: true,
-}));
+}
+
+app.use(cors(corsOptions))
+
 
 app.use(cookieParser());
 
