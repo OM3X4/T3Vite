@@ -1,4 +1,3 @@
-import React from 'react'
 import { Ring } from 'ldrs/react'
 import 'ldrs/react/Ring.css'
 

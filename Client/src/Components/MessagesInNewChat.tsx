@@ -20,7 +20,7 @@ function MessagesInNewChat({ setMessage, message }: any) {
                     QuestionTemplates.map((item) => {
                         return (
                             <div
-                                onClick={e => setMessage(item)}
+                                onClick={() => setMessage(item)}
                                 className="text-white/80 w-2/5 bg-secondryme pb-4 pt-4 hover:bg-black/40 px-4 rounded-2xl text-lg cursor-pointer ">
                                 {item}
                             </div>
