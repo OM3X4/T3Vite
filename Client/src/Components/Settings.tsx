@@ -2,7 +2,7 @@ import { FiLogOut } from "react-icons/fi";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useEffect, useState, useRef } from 'react'
 import useUserData from '../hooks/useUserData'
-import Loading from './loading'
+import Loading from './Loading'
 import useUpdateData from '../hooks/useUpdateData'
 import useUpdateKey from '../hooks/useUpdateKey'
 import { Link } from "react-router";
