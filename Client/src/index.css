@@ -31,7 +31,7 @@
   --color-errorme: #F43F5E;
 } */
 
-@theme {
+/* @theme {
   --color-primaryme: #d6b25d;
   --color-primary-hoverme: #f1c96d;
   --color-primary-softme: #a88946;
@@ -50,6 +50,30 @@
   --color-highlightme: #ffd700;
   --color-successme: #4ade80;
   --color-errorme: #f87171;
+} */
+
+@theme {
+--color-primaryme: #10a37f;               /* ChatGPT green — serious, calm, sharp */
+--color-primary-hoverme: #13b18a;         /* Lighter green hover */
+--color-primary-softme: #0e8a6c;          /* Soft accent */
+
+--color-backgroundme: #000000;            /* Pure black */
+--color-secondary-backgroundme: #0d0d0d;  /* Almost black, perfect for nav/sidebar */
+--color-surface-backgroundme: #1a1a1a;    /* Chat containers / modals */
+
+--color-text-primaryme: #ececec;          /* Soft light text (not pure white) */
+--color-text-mutedme: #a1a1a1;            /* Muted gray */
+--color-text-lowme: #6b6b6b;              /* Low visibility text */
+
+--color-borderme: #2a2a2a;                /* High contrast border */
+--color-border-softme: #1a1a1a;           /* Invisible edge padding */
+
+--color-highlightme: #facc15;             /* Optional: subtle gold or yellow */
+--color-successme: #22c55e;               /* System green */
+--color-errorme: #f43f5e;                 /* System red */
+
+
+
 }
 
 @keyframes scaleIn {

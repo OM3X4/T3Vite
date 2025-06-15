@@ -17,6 +17,7 @@ import { supabase } from '../../hooks/supabaseClient';
 import useUserData from '../../hooks/useUserData';
 import Loading from '../loading';
 import useGetChats from '../../hooks/useGetChats';
+import { useQueryClient } from '@tanstack/react-query';
 
 const models = [
     {
@@ -52,12 +53,11 @@ const models = [
 
 ]
 
-
-
-
 function ChatPage() {
     const { chatId: chatIdFromParams } = useParams();
 
+    const queryClient = useQueryClient()
+    const isFirstMessage = useRef<boolean>(true)
 
     const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false)
     const [chatId, setChatId] = useState(null)
@@ -80,7 +80,7 @@ function ChatPage() {
     useEffect(() => {
         if (chatIdFromParams) {
             setChatId(chatIdFromParams as any);
-            refetchChatHistory()
+            refetchChatMessages()
         }
     }, [chatIdFromParams]);
 
@@ -91,10 +91,10 @@ function ChatPage() {
         icon: <BsGoogle />
     },)
 
-    const { data: fetchedMessages, refetch: refetchChatHistory, isLoading: isLoadingFetchedMessages } = useChatMessages(chatId)
+    const { data: fetchedMessages, refetch: refetchChatMessages, isLoading: isLoadingFetchedMessages } = useChatMessages(chatId)
 
     const {isLoading: isLoadingUserData} = useUserData()
-    const {isLoading: isLoadingUserChat} = useGetChats()
+    const {isLoading: isLoadingUserChat , refetch: refetchChats} = useGetChats()
 
 
     useEffect(() => {
@@ -116,9 +116,13 @@ function ChatPage() {
                 content: data.message,
                 createdAt: new Date().toISOString(),
             };
-            console.log([...messages, (tempResponse as MessageFetched)])
             setMessages((prevMessages) => ([...prevMessages, tempResponse] as any))
             setIsLoadingNewMessage(false)
+
+            if(isFirstMessage.current){
+                isFirstMessage.current = false
+                refetchChats()
+            }
         }
     )
 
@@ -144,9 +148,6 @@ function ChatPage() {
             })
         }
     }, [])
-
-    if(isLoadingUserChat || isLoadingUserData || (isLoadingFetchedMessages && !fetchedMessages)) return <Loading />
-
 
 
     function handleSend() {
@@ -179,6 +180,7 @@ function ChatPage() {
                         chatId: data.chatid,
                         messages: messagesToSend
                     });
+                    console.log("refetching the chats")
                 }
             });
         } else {
@@ -196,6 +198,10 @@ function ChatPage() {
         setMessages([])
         setChatId(null)
         setMessage("")
+    }
+
+    if(isLoadingUserChat || isLoadingUserData){
+        return <Loading />
     }
 
     return (
