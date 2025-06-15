@@ -14,20 +14,20 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
         <>
             {
                 message.role === "user" ?
-                    <div className="flex items-center gap-3 text-white flex-row-reverse mb-3">
+                    <div className="flex items-center gap-3 text-text-primaryme flex-row-reverse mb-3 animation-slide-up">
                         <img src={userData?.imageUrl} alt="" referrerPolicy="no-referrer" className="w-7 rounded-full" />
                         <h1 className="text-xl">You</h1>
                     </div>
                     :
-                    <div className="flex items-center gap-3 text-white mb-3">
-                        <div className="text-primaryme bg-grayme/50 p-2 font-bold rounded-full w-7 h-7 flex items-center justify-center">AI</div>
+                    <div className="flex items-center gap-3 text-text-primaryme mb-3 animation-slide-up">
+                        <div className="text-primaryme bg-surface-backgroundme p-2 font-bold rounded-full w-7 h-7 flex items-center justify-center">AI</div>
                         <h1 className="text-xl">oAI</h1>
                     </div>
             }
             <div
                 key={message.id}
-                className={clsx("text-white/80 space-y-10 chat-item mb-10 break-words", {
-                    "bg-secondryme p-3 rounded-2xl self-end": message.role === "user",
+                className={clsx("text-text-primaryme space-y-10 chat-item mb-10 break-words", {
+                    "bg-secondary-backgroundme p-3 rounded-2xl self-end": message.role === "user",
                 })}
                 style={{ animationDelay: `0.5s` }}
             >

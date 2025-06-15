@@ -6,9 +6,9 @@ function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProvide
 
 
     return (
-        <div className="w-full pb-2 bg-backgroundme">
+        <div className="w-full pb-2 bg-backgroundme z-50">
             <div className="w-[95%] md:w-[70%] mx-auto flex flex-col gap-3">
-                <div className="bg-secondryme rounded-3xl flex items-center justify-between px-5 py-3 gap-10 h-full">
+                <div className="bg-secondary-backgroundme rounded-3xl flex items-center justify-between px-5 py-3 gap-10 h-full">
                     <div className="w-full h-full">
                         <textarea
                             value={message}
@@ -19,7 +19,7 @@ function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProvide
                                 }
                             }}
                             onChange={e => setMessage(e.target.value)}
-                            className="py-2 text-white w-full outline-none resize-none overflow-auto max-h-[12rem]"
+                            className="py-2 text-text-primaryme placeholder:text-text-mutedme w-full outline-none resize-none overflow-auto max-h-[12rem]"
                             placeholder="Type your message here"></textarea>
                         <div
                             className="relative">
@@ -29,12 +29,12 @@ function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProvide
                                     setModelProviderName(option!)
                                 }}>
                                 <SelectTrigger className="outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:ring-0 cursor-pointer border-0 hover:bg-black/20">
-                                    <div className="flex items-center gap-2 text-white">
+                                    <div className="flex items-center gap-2 text-text-primaryme">
                                         {modelProviderName.icon}
                                         {modelProviderName.name}
                                     </div>
                                 </SelectTrigger>
-                                <SelectContent position="popper" side="top" align="start" className="bg-backgroundme text-white border-primaryme">
+                                <SelectContent position="popper" side="top" align="start" className="bg-surface-backgroundme text-white border-primaryme">
                                     {
                                         models.map((model: any) => {
                                             return (
@@ -53,11 +53,11 @@ function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProvide
                     </div>
                     <div
                         onClick={handleMessageSent}
-                        className=" bg-primaryme self-end text-2xl p-2 rounded-lg flex items-center justify-center cursor-pointer hover:brightness-130 text-white ">
+                        className=" bg-primaryme self-end text-2xl p-2 rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-hoverme text-text-primaryme ">
                         {isLoadingNewMessage ? <MessageLoading size={25}/> : <IoMdSend />}
                     </div>
                 </div>
-                <p className="text-center text-grayme text-xs">OmarAI can make mistakes. Consider checking important information</p>
+                <p className="text-center text-text-mutedme text-xs">OmarAI can make mistakes. Consider checking important information</p>
             </div>
         </div>
     )

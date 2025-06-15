@@ -3,12 +3,31 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* --color-primaryme: #0ea5e9;
+--color-secondryme: #192335;
+--color-backgroundme: #10192b;
+--color-grayme: #8e9db2;
+--color-backgroundgray: #424242; */
 @theme {
-  --color-primaryme: #0ea5e9;
-  --color-secondryme: #192335;
-  --color-backgroundme: #10192b;
-  --color-grayme: #8e9db2;
-  --color-backgroundgray: #424242;
+
+  --color-primaryme: #7F5AF0;
+  --color-primary-hoverme: #A78BFA;
+  --color-primary-softme: #3F3CBB;
+
+  --color-backgroundme: #0B0F19;
+  --color-secondary-backgroundme: #111827;
+  --color-surface-backgroundme: #1C2433;
+
+  --color-text-primaryme: #E4E8EF;
+  --color-text-mutedme: #9CA3AF;
+  --color-text-lowme: #6B7280;
+
+  --color-borderme: #2A2F3A;
+  --color-border-softme: #1F2937;
+
+  --color-highlightme: #FFCB6B;
+  --color-successme: #22C55E;
+  --color-errorme: #F43F5E;
 }
 
 @keyframes scaleIn {
@@ -20,6 +39,26 @@
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation-slide-up {
+  animation-name: slideUp;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+  opacity: 0; /* default state before animation */
+  transform: translateY(120px);
 }
 
 .chat-container {
