@@ -8,7 +8,8 @@
 --color-backgroundme: #10192b;
 --color-grayme: #8e9db2;
 --color-backgroundgray: #424242; */
-@theme {
+
+/* @theme {
 
   --color-primaryme: #7F5AF0;
   --color-primary-hoverme: #A78BFA;
@@ -28,6 +29,27 @@
   --color-highlightme: #FFCB6B;
   --color-successme: #22C55E;
   --color-errorme: #F43F5E;
+} */
+
+@theme {
+  --color-primaryme: #d6b25d;
+  --color-primary-hoverme: #f1c96d;
+  --color-primary-softme: #a88946;
+
+  --color-backgroundme: #0b0b0b;
+  --color-secondary-backgroundme: #141414;
+  --color-surface-backgroundme: #1e1e1e;
+
+  --color-text-primaryme: #f5f5f5;
+  --color-text-mutedme: #a3a3a3;
+  --color-text-lowme: #707070;
+
+  --color-borderme: #2b2b2b;
+  --color-border-softme: #1a1a1a;
+
+  --color-highlightme: #ffd700;
+  --color-successme: #4ade80;
+  --color-errorme: #f87171;
 }
 
 @keyframes scaleIn {
