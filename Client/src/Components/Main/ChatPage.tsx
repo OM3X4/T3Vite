@@ -17,7 +17,6 @@ import { supabase } from '../../hooks/supabaseClient';
 import useUserData from '../../hooks/useUserData';
 import Loading from '../loading';
 import useGetChats from '../../hooks/useGetChats';
-import { useQueryClient } from '@tanstack/react-query';
 
 const models = [
     {
