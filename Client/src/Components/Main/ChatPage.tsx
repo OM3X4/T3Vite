@@ -56,7 +56,6 @@ const models = [
 function ChatPage() {
     const { chatId: chatIdFromParams } = useParams();
 
-    const queryClient = useQueryClient()
     const isFirstMessage = useRef<boolean>(true)
 
     const [isLoadingNewMessage, setIsLoadingNewMessage] = useState(false)
