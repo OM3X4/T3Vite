@@ -19,7 +19,7 @@ function SideBar({ isOpen, setIsOpen, ResetChat }: any) {
 
 	return (
 		<div className={clsx("h-full", {
-			"lg:w-[25vw] w-screen p-4 ": isOpen,
+			"lg:w-[25vw] w-screen p-4 lg:pr-0 ": isOpen,
 			"absolute top-0 left-0 z-50 w-fit": !isOpen
 		})}>
 			<div
