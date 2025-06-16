@@ -1,8 +1,9 @@
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 import { IoMdSend } from 'react-icons/io'
 import MessageLoading from './MessageLoading'
+import TextareaAutosize from 'react-textarea-autosize'
 
-function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProviderName , modelProviderName , message , setMessage , models , } : any) {
+function MessageInput({ isLoadingNewMessage, handleMessageSent, setModelProviderName, modelProviderName, message, setMessage, models, }: any) {
 
 
     return (
@@ -10,17 +11,19 @@ function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProvide
             <div className="w-[95%] md:w-[70%] mx-auto flex flex-col gap-3">
                 <div className="bg-secondary-backgroundme rounded-3xl flex items-center justify-between px-5 py-3 gap-10 h-full">
                     <div className="w-full h-full">
-                        <textarea
+                        <TextareaAutosize
                             value={message}
-                            onKeyDown={(e) => {
+                            onKeyDown={(e: any) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
                                     e.preventDefault()
                                     handleMessageSent()
                                 }
                             }}
-                            onChange={e => setMessage(e.target.value)}
-                            className="py-2 text-text-primaryme placeholder:text-text-mutedme w-full outline-none resize-none overflow-auto max-h-[12rem]"
-                            placeholder="Type your message here"></textarea>
+                            onChange={(e: any) => setMessage(e.target.value)}
+                            minRows={1}
+                            maxRows={5}
+                            className="py-2 text-text-primaryme placeholder:text-text-mutedme w-full outline-none resize-none overflow-auto"
+                        />
                         <div
                             className="relative">
                             <Select
@@ -54,7 +57,7 @@ function MessageInput({isLoadingNewMessage,  handleMessageSent , setModelProvide
                     <div
                         onClick={handleMessageSent}
                         className=" bg-primaryme self-end text-2xl p-2 rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-hoverme text-text-primaryme ">
-                        {isLoadingNewMessage ? <MessageLoading size={25}/> : <IoMdSend />}
+                        {isLoadingNewMessage ? <MessageLoading size={25} /> : <IoMdSend />}
                     </div>
                 </div>
                 <p className="text-center text-text-mutedme text-xs">OmarAI can make mistakes. Consider checking important information</p>
