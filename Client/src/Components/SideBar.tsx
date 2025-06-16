@@ -1,3 +1,5 @@
+import { MdDelete } from "react-icons/md";
+import { AiOutlineBranches } from "react-icons/ai";
 import { BsChatLeft } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsLayoutSidebarInset } from "react-icons/bs";
@@ -7,14 +9,26 @@ import clsx from "clsx";
 import { useNavigate } from 'react-router'
 import useUserData from "../hooks/useUserData";
 import MessageLoading from "./MessageLoading";
+import useDeleteChat from "../hooks/useDeleteChat";
+import { toast } from "sonner";
+import { useLocation } from "react-router";
 
 function SideBar({ isOpen, setIsOpen, ResetChat }: any) {
 
+	const location = useLocation()
 	const navigate = useNavigate()
-	const { data: chatsData, isLoading: isLoadingChats, isError: isErrorChats } = useGetChats()
+	const { data: chatsData, isLoading: isLoadingChats, isError: isErrorChats , refetch: refetchChats} = useGetChats()
 	const { data: userData } = useUserData()
 
-
+	const { mutate: deleteChat } = useDeleteChat((data: any) => {
+		if(location.pathname === `/c/${data.chatid}`){
+			console.log("navigating ")
+			navigate("/")
+			ResetChat()
+		}
+		refetchChats()
+		toast.success("Chat deleted successfully")
+	})
 
 
 	return (
@@ -71,11 +85,15 @@ function SideBar({ isOpen, setIsOpen, ResetChat }: any) {
 										return (
 											<Link
 												to={`/c/${chat.id}`}
-												key={chat.id} className="relative w-full px-4 py-5 gap-3 text-text-primaryme text-sm hover:bg-surface-backgroundme cursor-pointer rounded-md flex items-center overflow-hidden chat-item"
+												key={chat.id}
+												className="relative w-full px-4 py-5 gap-3 text-text-primaryme text-sm hover:bg-surface-backgroundme cursor-pointer rounded-md flex items-center justify-between overflow-hidden chat-item"
 												style={{ animationDelay: `${(index * 0.15) + 0.5}s` }}>
 												<div className="absolute left-0 w-[3px] h-full rounded-full bg-primaryme"></div>
-												<BsChatLeft />
-												{chat.title || "New Chat"}
+												<div className="flex gap-2 items-center">
+													{chat.isBranch ? <AiOutlineBranches className="text-lg"/> : <BsChatLeft className="text-lg"/>}
+													{chat.title || "New Chat"}
+												</div>
+												<div><MdDelete className="text-lg text-text-primaryme z-50 cursor-pointer hover:text-errorme" onClick={(e) => {e.preventDefault();e.stopPropagation();deleteChat(chat.id)}}/></div>
 											</Link>
 										)
 									})

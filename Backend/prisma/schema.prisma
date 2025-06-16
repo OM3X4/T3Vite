@@ -32,12 +32,13 @@ model Chat {
   userId    String
   messages  Message[]
   title     String?
+  isBranch  Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 
 model Message {
   id        String   @id @default(uuid())
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  chat      Chat     @relation(fields: [chatId], references: [id] , onDelete: Cascade)
   chatId    String
   role      String   // 'user' or 'assistant'
   content   String

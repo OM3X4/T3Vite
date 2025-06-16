@@ -137,4 +137,68 @@ router.post("/user" , authenticateJWT , async (req , res) => {
     }
 })
 
+router.post('/branch' ,authenticateJWT , async (req , res) => {
+    try {
+        const messageId = req.body.messageid;
+        const message = await prisma.message.findUnique({
+            where: {
+                id: messageId
+            },
+            include: {
+                chat: {
+                    include: {
+                        messages: true
+                    }
+                }
+            }
+        })
+
+        const newChat = await prisma.chat.create({
+            data: {
+                isBranch: true,
+                title: message.chat.title,
+                userId: message.chat.userId,
+                messages: {
+                    createMany: {
+                        data: message.chat.messages.filter(m => m.createdAt <= message.createdAt).map(m => ({ content: m.content, role: m.role , createdAt: m.createdAt }))
+
+                    }
+                }
+            }
+        })
+        res.json({ chatid: newChat.id })
+
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
+router.delete("/chat/:chatId", authenticateJWT, async (req, res) => {
+    try {
+        const chatId = req.params.chatId
+        const user = req.user
+        const userId = user.id
+        const chat = await prisma.chat.findUnique({
+            where: {
+                id: chatId
+            }
+        })
+
+        if (chat.userId !== userId) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        await prisma.chat.delete({
+            where: {
+                id: chatId
+            }
+        })
+        res.status(200).json({ chatid: chatId });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
 export default router

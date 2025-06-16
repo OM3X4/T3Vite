@@ -18,6 +18,7 @@ import { supabase } from '../../hooks/supabaseClient';
 import useUserData from '../../hooks/useUserData';
 import Loading from '../loading';
 import useGetChats from '../../hooks/useGetChats';
+import { useNavigate } from "react-router";
 
 const models = [
     {
@@ -74,6 +75,8 @@ const models = [
 
 function ChatPage() {
     const { chatId: chatIdFromParams } = useParams();
+
+    const navigate = useNavigate()
 
     const isFirstMessage = useRef<boolean>(true)
 
@@ -213,6 +216,7 @@ function ChatPage() {
     }
 
     function ResetChat() {
+        navigate("/")
         isFirstMessage.current = true
         setMessages([])
         setChatId(null)

@@ -1,3 +1,5 @@
+import { BiCopy } from "react-icons/bi";
+import { AiOutlineBranches } from "react-icons/ai";
 import clsx from "clsx"
 import React from "react"
 import ReactMarkdown from "react-markdown"
@@ -5,10 +7,35 @@ import remarkGfm from "remark-gfm"
 import rehypeHighlight from "rehype-highlight"
 import "highlight.js/styles/vs2015.css"
 import useUserData from "../hooks/useUserData"
+import { toast } from "sonner";
+import useBranchChat from "../hooks/useBranchChat";
+import { useNavigate } from "react-router";
+import useGetChats from "../hooks/useGetChats";
 
 const ChatMessage = React.memo(({ message }: { message: any }) => {
+    const navigate = useNavigate()
 
     const { data: userData } = useUserData()
+
+    const { refetch: refetchChats } = useGetChats()
+
+    const { mutate: branchChat } = useBranchChat((data: any) => {
+        toast.success("Branched the chat");
+        navigate(`/c/${data.chatid}`)
+        refetchChats()
+    });
+
+
+
+    const handleCopy = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            toast.success("Copied to clipboard")
+        } catch (err) {
+            toast.error("Failed to copy")
+            console.error(err);
+        }
+    };
 
     return (
         <>
@@ -26,8 +53,8 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
             }
             <div
                 key={message.id}
-                className={clsx("text-text-primaryme space-y-10 chat-item mb-10 break-words", {
-                    "bg-secondary-backgroundme p-3 rounded-2xl self-end": message.role === "user",
+                className={clsx("text-text-primaryme space-y-10 chat-item break-words", {
+                    "bg-secondary-backgroundme p-3 pb-0 rounded-2xl self-end": message.role === "user",
                 })}
                 style={{ animationDelay: `0.5s` }}
             >
@@ -91,6 +118,18 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                     {message.content}
                 </ReactMarkdown>
             </div>
+            {
+                message.role === "assistant" ?
+                    <div className="mt-0 flex items-center gap-3">
+                        <button
+                            onClick={() => branchChat( message.id )}
+                            className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><AiOutlineBranches /></button>
+                        <button
+                            onClick={() => handleCopy(message.content)}
+                            className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><BiCopy /></button>
+                    </div>
+                    : ""
+            }
         </>
     )
 })

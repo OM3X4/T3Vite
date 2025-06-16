@@ -40,6 +40,7 @@ function MessagesInNewChat({ setMessage, message }: any) {
                         QuestionTemplates.map((item) => {
                             return (
                                 <div
+                                key={item.question}
                                 onClick={() => setMessage(item.question)}
                                 className="flex flex-col gap-3 items-center justify-center text-text-primaryme flex-1 bg-secondary-backgroundme pb-4 pt-4 hover:bg-surface-backgroundme px-4 rounded-2xl text-lg cursor-pointer ">
                                     <span className="text-primaryme text-2xl">{item.icon}</span>
