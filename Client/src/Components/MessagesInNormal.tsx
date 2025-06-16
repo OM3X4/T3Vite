@@ -15,7 +15,9 @@ export default function MessagesInNormal({ isLoadingFetchedMessages , messages, 
         <div className="flex flex-col w-full md:w-3/4 text-wrap mx-auto py-10 px-10 overflow-y-auto h-full chat-container">
             {
                 isLoadingFetchedMessages || !fetchedMessages ?
-                    <MessageLoading />
+                    <div className="flex flex-col items-center justify-center w-fulls h-full">
+                        <MessageLoading />
+                    </div>
                     :
                     messages.map((message: any , index: number) => {
                         return (

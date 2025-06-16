@@ -143,7 +143,10 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                     <div className="flex flex-row-reverse mt-1">
                         <button
                             onClick={() => memorizeMessage(message.content)}
-                            className="text-white hover:bg-surface-backgroundme text-md p-2 rounded-md cursor-pointer"><TbBrain /></button>
+                            className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><TbBrain /></button>
+                        <button
+                            onClick={() => handleCopy(message.content)}
+                            className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><BiCopy /></button>
                     </div>
             }
         </>
