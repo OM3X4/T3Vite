@@ -1,3 +1,4 @@
+import { BiSearchAlt2 } from "react-icons/bi";
 /* eslint-disable */
 import { useState, useEffect, useRef } from 'react'
 import type { MessageFetched } from '../../Types/Types';
@@ -49,6 +50,25 @@ const models = [
         name: "GPT 4o Mini",
         icon: <SiOpenai />
     },
+    {
+        model: "gpt-4o",
+        provider: "openai",
+        name: "GPT 4o",
+        icon: <SiOpenai />
+    },
+    {
+        model: "gpt-4o-mini-search-preview",
+        provider: "openai",
+        name: "GPT 4o Mini(Search)",
+        icon: <SiOpenai />
+    },
+
+    {
+        model: "sonar",
+        provider: "perplexity",
+        name: "Sonar(Perplexity)",
+        icon: <BiSearchAlt2 />
+    }
 
 ]
 
@@ -193,6 +213,7 @@ function ChatPage() {
     }
 
     function ResetChat() {
+        isFirstMessage.current = true
         setMessages([])
         setChatId(null)
         setMessage("")

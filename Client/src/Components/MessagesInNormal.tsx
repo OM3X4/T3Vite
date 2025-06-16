@@ -1,4 +1,3 @@
-/* eslint-disable */
 import MessageLoading from "./MessageLoading"
 import ChatMessage from "./ChatMessage"
 import { useEffect , useRef } from "react"
@@ -13,7 +12,7 @@ export default function MessagesInNormal({ isLoadingFetchedMessages , messages, 
 
 
     return (
-        <div className="flex flex-col w-full md:w-3/4 text-wrap mx-auto py-10 px-3 overflow-y-auto h-full chat-container">
+        <div className="flex flex-col w-full md:w-3/4 text-wrap mx-auto py-10 px-10 overflow-y-auto h-full chat-container">
             {
                 isLoadingFetchedMessages || !fetchedMessages ?
                     <MessageLoading />

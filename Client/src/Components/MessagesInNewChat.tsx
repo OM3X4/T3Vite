@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { AiFillBug } from "react-icons/ai";
 import clsx from "clsx"
 import { FiEdit3 } from "react-icons/fi";

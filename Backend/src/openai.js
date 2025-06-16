@@ -89,10 +89,14 @@ router.post("/", authenticateJWT, async (req, res) => {
             });
 
             const title = titleResponse.choices[0].message.content.trim();
+            const cleanTitle = title
+                .replace(/^["']|["']$/g, '')       // remove surrounding quotes
+                .replace(/[.,!?;:"“”‘’]+$/g, '')   // remove trailing punctuation
+                .trim();                           // remove leading/trailing spaces
             // Save to DB
             await prisma.chat.update({
                 where: { id: chatId },
-                data: { title }
+                data: { title: cleanTitle }
             });
         }
 
