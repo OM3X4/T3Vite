@@ -36,6 +36,7 @@ router.post("/", authenticateJWT, async (req, res) => {
 
     const systemPrompt = `
             You are a helpful, conversational AI assistant called "oAI".
+            The platform you work inside is made by Omar Emad.
 
             ${typeof user.job == "string" ? `You're chatting with someone who prefers to be called "${user.inchatname}".` : ""}
 
@@ -125,7 +126,7 @@ router.post("/", authenticateJWT, async (req, res) => {
         }
 
         if (error.status == 402) {
-            res.status(402).json({ message: 'This response requires more credits than your current plan allows. Please buy more credit from openrouter.ai to continue chat , or you might try free models' });
+            return res.status(402).json({ message: 'This response requires more credits than your current plan allows. Please buy more credit from openrouter.ai to continue chat , or you might try free models' });
         }
         res.status(500).json({ error: 'Internal server error' });
     }
@@ -151,6 +152,57 @@ router.get("/new", authenticateJWT, async (req, res) => {
     }
 });
 
+
+router.post("/memorize", authenticateJWT, async (req, res) => {
+    console.log("memorzing")
+    try {
+        const messageContent = req.body.messagecontent;
+
+
+        if (!messageContent) {
+            return res.status(404).json({ error: "Message not found." });
+        }
+
+        // 2. Decrypt user's OpenRouter API key
+        const user = req.user;
+        if (!user?.apiKeyHash) {
+            return res.status(499).json({ error: "No API key found for this user." });
+        }
+
+        const apiKey = decrypt(user.apiKeyHash);
+
+        // 3. Initialize OpenAI client
+        const openai = new OpenAI({
+            apiKey: apiKey,
+            baseURL: "https://openrouter.ai/api/v1",
+        });
+
+        // 4. Get summary from LLM
+        const response = await openai.chat.completions.create({
+            model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
+            messages: [
+                { role: "system", content: "Summarize the following message in 1–2 sentences, focusing on any personal details, preferences, or context about the user that may be useful for future interactions. This summary will be stored as a reference note for remembering the user." },
+                { role: "user", content: messageContent },
+            ],
+        });
+
+        const summary = response.choices?.[0]?.message?.content;
+        if (!summary) {
+            return res.status(500).json({ error: "LLM did not return a valid summary." });
+        }
+
+        // 5. Save the summary to `moreinfo`
+        await prisma.user.update({
+            where: { email: user.email },
+            data: { moreinfo: `${user.moreinfo}${summary}` },
+        });
+
+        res.status(200).json({ message: "Message memorized successfully.", summary });
+    } catch (err) {
+        console.error("Memorize error:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 
 

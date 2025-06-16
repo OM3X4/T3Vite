@@ -1,3 +1,4 @@
+import { TbBrain } from "react-icons/tb";
 import { BiCopy } from "react-icons/bi";
 import { AiOutlineBranches } from "react-icons/ai";
 import clsx from "clsx"
@@ -11,6 +12,7 @@ import { toast } from "sonner";
 import useBranchChat from "../hooks/useBranchChat";
 import { useNavigate } from "react-router";
 import useGetChats from "../hooks/useGetChats";
+import useMemorizeMessage from "../hooks/useMemorizeMessage";
 
 const ChatMessage = React.memo(({ message }: { message: any }) => {
     const navigate = useNavigate()
@@ -22,6 +24,11 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
     const { mutate: branchChat } = useBranchChat((data: any) => {
         toast.success("Branched the chat");
         navigate(`/c/${data.chatid}`)
+        refetchChats()
+    });
+
+    const { mutate: memorizeMessage } = useMemorizeMessage(() => {
+        toast.success("Memorized the message");
         refetchChats()
     });
 
@@ -41,12 +48,12 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
         <>
             {
                 message.role === "user" ?
-                    <div className="flex items-center gap-3 text-text-primaryme flex-row-reverse mb-3 animation-slide-up">
+                    <div className="flex items-center gap-3 text-text-primaryme mb-3 flex-row-reverse animation-slide-up">
                         <img src={userData?.imageUrl} alt="" referrerPolicy="no-referrer" className="w-7 rounded-full" />
                         <h1 className="text-xl">You</h1>
                     </div>
                     :
-                    <div className="flex items-center gap-3 text-text-primaryme mb-3 animation-slide-up">
+                    <div className="flex items-center gap-3 text-text-primaryme mb-3 mt-15 animation-slide-up">
                         <div className="text-primaryme bg-surface-backgroundme p-2 font-bold rounded-full w-7 h-7 flex items-center justify-center">AI</div>
                         <h1 className="text-xl">oAI</h1>
                     </div>
@@ -99,14 +106,14 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                             </a>
                         ),
                         pre: ({ children }) => (
-                            <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm whitespace-pre-wrap break-words overflow-x-hidden w-full max-w-full">
+                            <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm whitespace-pre-wrap break-words overflow-x-scroll w-full max-w-full">
                                 {children}
                             </pre>
                         ),
                         code: ({ className, children }) => {
 
                             return (
-                                <div className=" bg-[#1e1e1e] rounded-xl my-4 overflow-hidden">
+                                <div className=" bg-[#1e1e1e] rounded-xl my-4 overflow-x-scroll">
                                     <pre className="overflow-x-auto text-sm p-4 whitespace-pre-wrap break-words">
                                         <code className={className}>{children}</code>
                                     </pre>
@@ -120,15 +127,23 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
             </div>
             {
                 message.role === "assistant" ?
-                    <div className="mt-0 flex items-center gap-3">
+                    <div className="mt-0 mb-5 flex items-center gap-3">
                         <button
                             onClick={() => branchChat( message.id )}
                             className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><AiOutlineBranches /></button>
                         <button
                             onClick={() => handleCopy(message.content)}
                             className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><BiCopy /></button>
+                        <button
+                            onClick={() => memorizeMessage(message.id)}
+                            className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><TbBrain /></button>
                     </div>
-                    : ""
+                    :
+                    <div className="flex flex-row-reverse mt-1">
+                        <button
+                            onClick={() => memorizeMessage(message.content)}
+                            className="text-white hover:bg-surface-backgroundme text-md p-2 rounded-md cursor-pointer"><TbBrain /></button>
+                    </div>
             }
         </>
     )
