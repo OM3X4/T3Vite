@@ -177,14 +177,50 @@ router.post("/memorize", authenticateJWT, async (req, res) => {
             baseURL: "https://openrouter.ai/api/v1",
         });
 
-        // 4. Get summary from LLM
+
+        const systemPrompt = `
+        You are an AI assistant tasked with maintaining a user's profile. Your job is to extract and summarize ONLY what the user has clearly stated, without making any assumptions, guesses, or inferences. Focus on extracting directly mentioned facts only.
+
+        **Existing User Information (for context, do not repeat or contradict this):**
+        ${user.moreinfo}
+
+        ${ typeof user.inchatname == "string" && user.inchatname != "" ? `The user's name is: "${user.inchatname}".` : "" }
+
+        **Instructions:**
+        From the new message, extract clear, factual details. Do not try to guess implied meanings or deduce information from context. Ignore anything that is vague, ambiguous, or merely hinted at.
+
+        **Include only the following types of explicitly stated info:**
+        - Personal Details: (e.g., "My name is Omar", "I'm 17 years old")
+        - Preferences: (e.g., "I like JavaScript", "I prefer dark mode")
+        - Current Context: (e.g., "I'm building a typing website")
+
+        **DO NOT:**
+        - Infer emotions or motivations unless clearly stated
+        - Summarize beyond what’s written
+        - Add opinions or speculative data
+        - Rephrase or beautify the user's original points
+
+        **Output Format:**
+        Write a concise paragraph summarizing the clear facts from the message for storing in the user’s profile.
+        `;
+
+
+
         const response = await openai.chat.completions.create({
             model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
             messages: [
-                { role: "system", content: "Summarize the following message in 1–2 sentences, focusing on any personal details, preferences, or context about the user that may be useful for future interactions. This summary will be stored as a reference note for remembering the user." },
-                { role: "user", content: messageContent },
+                {
+                    role: "system",
+                    content: systemPrompt
+                },
+                {
+                    role: "user",
+                    content: messageContent
+                }
             ],
+            temperature: 0.1, // Using a low temperature for more predictable, factual output
         });
+
 
         const summary = response.choices?.[0]?.message?.content;
         if (!summary) {
