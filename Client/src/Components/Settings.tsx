@@ -38,9 +38,9 @@ function Settings() {
     if (isLoading) return <Loading />
 
     return (
-        <div className='w-[70vw] min-h-screen mx-auto flex items-start justify-center py-20 gap-10 text-white'>
-            {/* Image */}
-            <div className="flex flex-col gap-2">
+        <div className='w-[90vw] lg:w-[70vw] min-h-screen mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-center py-20 gap-10 text-white'>
+            {/* Buttons */}
+            <div className="flex lg:flex-col gap-2">
                 <Link to="/" className="flex items-center gap-2 bg-secondary-backgroundme hover:bg-surface-backgroundme p-2 rounded-2xl cursor-pointer"><AiOutlineArrowLeft />Back to chat</Link>
                 <Link
                     className="flex items-center gap-2 bg-secondary-backgroundme hover:bg-surface-backgroundme p-2 rounded-2xl cursor-pointer"
@@ -48,11 +48,15 @@ function Settings() {
                         supabase.auth.signOut()
                     }}><FiLogOut />Logout</Link>
             </div>
-            <div className='flex items-center justify-center flex-col gap-2'>
-                <img src={`${userData?.imageUrl}?t=${Date.now()}`} className='rounded-full overflow-hidden w-[150px] h-[150px]' referrerPolicy="no-referrer" />
-                <h1 className='font-bold text-3xl'>{userData?.name}</h1>
-                <h1 className='text-lg text-grayme'>{userData?.email}</h1>
-                <div className='p-3 bg-surface-backgroundme rounded-2xl mt-10 flex flex-col gap-5'>
+            {/* Image */}
+            <div className='flex items-center justify-center lg:flex-col gap-2'>
+
+                <img src={`${userData?.imageUrl}?t=${Date.now()}`} className='rounded-full overflow-hidden size-[100px] lg:size-[150px]' referrerPolicy="no-referrer" />
+                <div>
+                    <h1 className='font-bold text-3xl'>{userData?.name}</h1>
+                    <h1 className='text-lg text-grayme'>{userData?.email}</h1>
+                </div>
+                <div className='p-3 bg-surface-backgroundme rounded-2xl mt-10 hidden lg:flex flex-col gap-5'>
                     <h1 className='text-md font-semibold'>Keyboard Shortcuts</h1>
                     <div className='flex items-center justify-between gap-10'>
                         <h1>New Chat:</h1>
@@ -61,7 +65,7 @@ function Settings() {
                 </div>
             </div>
             {/* Main */}
-            <div className='flex flex-col gap-10 w-[40vw] mb-20'>
+            <div className='flex flex-col gap-10 w-[90vw] lg:w-[40vw] mb-20'>
                 <h1 className='font-bold text-3xl'>Customize oAI</h1>
                 <div>
                     <h1 className='font-semibold mb-2'>What should oAI call you?</h1>
