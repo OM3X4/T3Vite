@@ -7,9 +7,9 @@ function MessageInput({ isLoadingNewMessage, handleMessageSent, setModelProvider
 
 
     return (
-        <div className="w-full pb-2 bg-backgroundme z-50 animation-slide-up delay-300">
+        <div className="w-full py-2 bg-backgroundme z-50 animation-slide-up delay-300">
             <div className="w-[95%] md:w-[70%] mx-auto flex flex-col gap-3">
-                <div className="bg-secondary-backgroundme rounded-3xl flex items-center justify-between px-5 py-3 gap-10 h-full">
+                <div className="bg-surface-backgroundme rounded-3xl flex items-center justify-between px-5 py-3 gap-10 h-full">
                     <div className="w-full h-full">
                         <TextareaAutosize
                             value={message}

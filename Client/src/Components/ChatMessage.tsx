@@ -61,7 +61,8 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
             <div
                 key={message.id}
                 className={clsx("text-text-primaryme space-y-10 chat-item break-words", {
-                    "bg-secondary-backgroundme p-3 pb-0 rounded-2xl self-end": message.role === "user",
+                    "bg-secondary-backgroundme p-3 pb-0 rounded-2xl self-end lg:max-w-[75%]": message.role === "user",
+                    "lg:max-w-[90%]": message.role === "assistant",
                 })}
                 style={{ animationDelay: `0.5s` }}
             >
@@ -106,15 +107,15 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                             </a>
                         ),
                         pre: ({ children }) => (
-                            <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm whitespace-pre-wrap break-words overflow-x-scroll w-full max-w-full">
+                            <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm overflow-x-scroll">
                                 {children}
                             </pre>
                         ),
                         code: ({ className, children }) => {
 
                             return (
-                                <div className=" bg-[#1e1e1e] rounded-xl my-4 overflow-x-scroll">
-                                    <pre className="overflow-x-auto text-sm p-4 whitespace-pre-wrap break-words">
+                                <div className=" bg-[#1e1e1e] rounded-xl my-4 overflow-x-scroll w-fit">
+                                    <pre className="overflow-x-auto text-sm p-4 whitespace-pre-wrap w-fit">
                                         <code className={className}>{children}</code>
                                     </pre>
                                 </div>
