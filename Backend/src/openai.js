@@ -76,7 +76,7 @@ router.post("/", authenticateJWT, async (req, res) => {
             const firstUserMessage = userMessages.find(m => m.role === 'user')?.content;
 
             const titleResponse = await openai.chat.completions.create({
-                model: 'openai/gpt-3.5-turbo',
+                model: 'mistralai/mixtral-8x7b-instruct',
                 messages: [
                     {
                         role: 'system',
@@ -207,7 +207,7 @@ router.post("/memorize", authenticateJWT, async (req, res) => {
 
 
         const response = await openai.chat.completions.create({
-            model: "deepseek/deepseek-r1-0528-qwen3-8b:free",
+            model: "mistralai/mixtral-8x7b-instruct",
             messages: [
                 {
                     role: "system",

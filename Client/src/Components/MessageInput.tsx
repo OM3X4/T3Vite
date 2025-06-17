@@ -12,6 +12,7 @@ function MessageInput({ isLoadingNewMessage, handleMessageSent, setModelProvider
                 <div className="bg-surface-backgroundme rounded-3xl flex items-center justify-between px-5 py-3 gap-10 h-full">
                     <div className="w-full h-full">
                         <TextareaAutosize
+                            placeholder='Ask anything'
                             value={message}
                             onKeyDown={(e: any) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -22,7 +23,7 @@ function MessageInput({ isLoadingNewMessage, handleMessageSent, setModelProvider
                             onChange={(e: any) => setMessage(e.target.value)}
                             minRows={1}
                             maxRows={5}
-                            className="py-2 text-text-primaryme placeholder:text-text-mutedme w-full outline-none resize-none overflow-auto"
+                            className="p-2 text-text-primaryme placeholder:text-text-mutedme w-full outline-none resize-none overflow-auto"
                         />
                         <div
                             className="relative">
