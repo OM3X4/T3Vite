@@ -111,7 +111,7 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                             </a>
                         ),
                         pre: ({ children }) => (
-                            <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm overflow-x-scroll">
+                            <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm overflow-x-scroll whitespace-pre-wrap">
                                 {children}
                             </pre>
                         ),

@@ -44,7 +44,7 @@ function Settings() {
             {/* Image */}
             <div className='flex items-center justify-center w-full lg:w-fit flex-col gap-2'>
                 <div className="w-full lg:w-fit flex items-center justify-center flex-col bg-surface-backgroundme rounded-2xl px-20 py-5">
-                    <img src={`${userData?.imageUrl}?t=${Date.now()}`} className='rounded-full overflow-hidden size-[100px] lg:size-[120px]' referrerPolicy="no-referrer" />
+                    <img src={`${userData?.imageUrl}?t=${Date.now()}`} className='rounded-full bg-primaryme overflow-hidden size-[100px] lg:size-[120px]' referrerPolicy="no-referrer" />
                     <div className="flex items-center justify-center flex-col mt-5">
                         <h1 className='font-bold text-3xl'>{userData?.name}</h1>
                         <h1 className='text-lg text-grayme'>{userData?.email}</h1>
@@ -114,31 +114,43 @@ function Settings() {
                             type="password" className="mt-4 focus:outline-none border-borderme w-full focus:border-primaryme border-2 rounded-md px-3 py-2" placeholder="Your API key"/>
                         <p className="text-xs text-text-lowme mt-2">You will need an OpenRouter key to chat , No key yet? <a className="text-primaryme" href='https://openrouter.ai/' target='_blank'>Don't have one</a></p>
                     </div>
-                    <div className="mt-5">
-                        <p className="text-sm text-text-mutedme">Account Tier</p>
-                        <h1 className="flex items-center gap-2 text-2xl mt-2"><AiFillStar className="text-primaryme"/>{userData.openrouterdata.isfreetier ? "Free Tier" : "Premium Tier"}</h1>
-                    </div>
-                    <div className="mt-5">
-                        <p className="text-sm text-text-mutedme">Current Usage</p>
-                        <div className="w-full bg-secondary-backgroundme h-4 rounded-full relative mt-1">
-                            <div className="absolute bg-primaryme top-0 left-0 h-4 rounded-full" style={{ width: `${(10/20) * 100}%`}}></div>
-                        </div>
-                        <p className={clsx("mt-1" , {
-                            "text-errorme": userData.openrouterdata.usage >= userData.openrouterdata.credit,
-                            "text-text-lowme": userData.openrouterdata.usage < userData.openrouterdata.credit
-                        })}>{Math.round(userData.openrouterdata.usage * 100) / 100}/{Math.round(userData.openrouterdata.credit * 100) / 100} dollars used</p>
-                    </div>
-                    <div className="mt-3 flex items-center justify-between">
-                        <a
-                            href="https://openrouter.ai/settings/credits" target="_blank"
-                            className="flex items-center gap-2 bg-primaryme w-fit px-3 py-2 rounded-md cursor-pointer hover:bg-primary-hoverme"><AiFillCreditCard />Recharge API credit</a>
+                    {
+                        userData.openrouterdata?.apiKey ?
+                        <>
+                            <div className="mt-5">
+                                <p className="text-sm text-text-mutedme">Account Tier</p>
+                                <h1 className="flex items-center gap-2 text-2xl mt-2"><AiFillStar className="text-primaryme"/>{userData.openrouterdata?.isfreetier ? "Free Tier" : "Premium Tier"}</h1>
+                            </div>
+                            <div className="mt-5">
+                                <p className="text-sm text-text-mutedme">Current Usage</p>
+                                <div className="w-full bg-secondary-backgroundme h-4 rounded-full relative mt-1">
+                                    <div className="absolute bg-primaryme top-0 left-0 h-4 rounded-full" style={{ width: `${(10/20) * 100}%`}}></div>
+                                </div>
+                                <p className={clsx("mt-1" , {
+                                    "text-errorme": userData.openrouterdata?.usage >= userData.openrouterdata?.credit,
+                                    "text-text-lowme": userData.openrouterdata?.usage < userData.openrouterdata?.credit
+                                })}>{Math.round(userData.openrouterdata?.usage * 100) / 100}/{Math.round(userData.openrouterdata?.credit * 100) / 100} dollars used</p>
+                            </div>
+                            <div className="mt-3 flex items-center justify-between">
+                                <a
+                                    href="https://openrouter.ai/settings/credits" target="_blank"
+                                    className="flex items-center gap-2 bg-primaryme w-fit px-3 py-2 rounded-md cursor-pointer hover:bg-primary-hoverme"><AiFillCreditCard />Recharge API credit</a>
+                                <button
+                                    onClick={() => updateKey(InputData.apiKey)}
+                                    className="flex items-center gap-2 bg-primaryme w-fit px-3 py-2 rounded-md cursor-pointer hover:bg-primary-hoverme">
+                                    <FaSave />
+                                    Save API Key
+                                </button>
+                            </div>
+                        </>
+                        :
                         <button
                             onClick={() => updateKey(InputData.apiKey)}
-                            className="flex items-center gap-2 bg-primaryme w-fit px-3 py-2 rounded-md cursor-pointer hover:bg-primary-hoverme">
+                            className="flex items-center gap-2 bg-primaryme w-fit px-3 py-2 rounded-md cursor-pointer hover:bg-primary-hoverme mt-5">
                             <FaSave />
                             Save API Key
                         </button>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

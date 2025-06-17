@@ -101,7 +101,7 @@ function SideBar({ isOpen, setIsOpen, ResetChat }: any) {
 									<div className="text-black bg-white p-2 rounded-sm"><AiOutlinePlus /></div>
 								</button>
 							<Link to="/settings" className="flex text-white w-[90%] items-center gap-5 py-4 hover:bg-black/30 rounded-2xl cursor-pointer px-3">
-								<img src={userData?.imageUrl} referrerPolicy="no-referrer" className="w-10 h-10 rounded-full" />
+								<img src={userData?.imageUrl} referrerPolicy="no-referrer" className="w-10 h-10 rounded-full bg-primaryme" />
 								<h1>{userData?.name}</h1>
 							</Link>
 						</div>
