@@ -57,7 +57,7 @@ function MessageInput({ isLoadingNewMessage, handleMessageSent, setModelProvider
                     </div>
                     <div
                         onClick={handleMessageSent}
-                        className=" bg-primaryme self-end text-2xl p-2 rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-hoverme text-text-primaryme ">
+                        className=" bg-primaryme self-end size-10 text-2xl p-2 rounded-lg flex items-center justify-center cursor-pointer hover:bg-primary-hoverme text-text-primaryme ">
                         {isLoadingNewMessage ? <MessageLoading size={25} /> : <IoMdSend />}
                     </div>
                 </div>
