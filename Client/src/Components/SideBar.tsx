@@ -79,26 +79,10 @@ function SideBar({ isOpen, setIsOpen, ResetChat }: any) {
 					})}>
 
 						<div className="overflow-scroll chat-container pt-5">
-							<p className="text-text-mutedme text-md py-2 px-5">Chats</p>
+							<p className="text-text-mutedme text-xl py-2 px-5">Chats</p>
 							<div className="flex flex-col gap-3 px-5">
 								{
 									(!isLoadingChats && !isErrorChats && chatsData) ?
-									// chatsData.map((chat: any , index: any) => {
-									// 	return (
-									// 		<Link
-									// 			to={`/c/${chat.id}`}
-									// 			key={chat.id}
-									// 			className="relative w-full px-4 py-5 gap-3 text-text-primaryme text-sm hover:bg-surface-backgroundme cursor-pointer rounded-md flex items-center justify-between overflow-hidden chat-item"
-									// 			style={{ animationDelay: `${(index * 0.15) + 0.5}s` }}>
-									// 			<div className="absolute left-0 w-[3px] h-full rounded-full bg-primaryme"></div>
-									// 			<div className="flex gap-2 items-center">
-									// 				{chat.isBranch ? <AiOutlineBranches className="text-lg"/> : <BsChatLeft className="text-lg"/>}
-									// 				{chat.title || "New Chat"}
-									// 			</div>
-									// 			<div><MdDelete className="text-lg text-text-primaryme z-50 cursor-pointer hover:text-errorme" onClick={(e) => {e.preventDefault();e.stopPropagation();deleteChat(chat.id)}}/></div>
-									// 		</Link>
-									// 	)
-									// })
 									<Chats chatsData={chatsData} deleteChat={deleteChat} />
 									:
 									<div>
