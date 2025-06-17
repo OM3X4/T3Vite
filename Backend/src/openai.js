@@ -80,7 +80,7 @@ router.post("/", authenticateJWT, async (req, res) => {
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are a title generator. Given the user\'s first message in a chat with an AI assistant, return a short and relevant title. Only return the title. No quotes, no punctuation, no explanation.',
+                        content: 'You are a title generator. Given the user\'s first message in a chat with an AI assistant, return a less than 5 words and relevant title. Only return the title. No quotes, no punctuation, no explanation.',
                     },
                     {
                         role: 'user',
