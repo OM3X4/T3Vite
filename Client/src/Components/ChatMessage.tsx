@@ -91,7 +91,7 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                             <ul className="list-disc list-outside my-4 space-y-2 marker:text-primaryme">{children}</ul>
                         ),
                         ol: ({ children }) => (
-                            <ol className="list-decimal list-inside my-4 space-y-2 marker:text-primaryme">{children}</ol>
+                            <ol className="list-decimal list-outside my-4 space-y-2 marker:text-primaryme">{children}</ol>
                         ),
                         blockquote: ({ children }) => (
                             <blockquote className="border-l-4 border-gray-500 pl-4 italic my-4 text-gray-300">
@@ -116,15 +116,23 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                             </pre>
                         ),
                         code: ({ className, children }) => {
+                            const isCodeBlock = className && className.includes('language-');
 
-                            return (
-                                <div className=" bg-[#1e1e1e] rounded-xl my-4 overflow-x-scroll w-fit">
-                                    <pre className="overflow-x-auto text-sm p-4 whitespace-pre-wrap w-fit">
+                            if (isCodeBlock) {
+                                return (
+                                    <pre className="bg-[#1e1e1e] p-4 rounded-md my-4 text-sm overflow-x-auto">
                                         <code className={className}>{children}</code>
                                     </pre>
-                                </div>
-                            )
-                        },
+                                );
+                            }
+
+                            // Just inline <code>
+                            return (
+                                <code className="bg-[#1e1e1e] px-1 py-[2px] rounded text-sm text-gray-100">
+                                    {children}
+                                </code>
+                            );
+                        }
                     }}
                 >
                     {message.content}
@@ -134,7 +142,7 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
                 message.role === "assistant" ?
                     <div className="mt-0 mb-5 flex items-center gap-3">
                         <button
-                            onClick={() => branchChat( message.id )}
+                            onClick={() => branchChat(message.id)}
                             className="text-white hover:bg-surface-backgroundme text-2xl p-2 rounded-md cursor-pointer"><AiOutlineBranches /></button>
                         <button
                             onClick={() => handleCopy(message.content)}
