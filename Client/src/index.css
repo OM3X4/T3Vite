@@ -71,9 +71,6 @@
 --color-highlightme: #facc15;             /* Optional: subtle gold or yellow */
 --color-successme: #22c55e;               /* System green */
 --color-errorme: #f43f5e;                 /* System red */
-
-
-
 }
 
 @keyframes scaleIn {
@@ -132,6 +129,10 @@
   animation-timing-function: ease-out;
   opacity: 0; /* default state before animation */
   transform: scale(0.95);
+}
+
+body {
+  font-family: "Inter", sans-serif;
 }
 
 @layer base {
