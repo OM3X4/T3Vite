@@ -1,6 +1,6 @@
 import MessageLoading from "./MessageLoading"
 import ChatMessage from "./ChatMessage"
-import { useEffect , useRef } from "react"
+import { Fragment, useEffect , useRef } from "react"
 
 
 export default function MessagesInNormal({ isLoadingFetchedMessages , messages, fetchedMessages}: any) {
@@ -21,10 +21,10 @@ export default function MessagesInNormal({ isLoadingFetchedMessages , messages, 
                     :
                     messages.map((message: any , index: number) => {
                         return (
-                            <>
+                            <Fragment key={message.id}>
                                 {index === messages.length - 1 && <div ref={messagesRefForScrolling}></div>}
                                 <ChatMessage key={message.id} message={message} />
-                            </>
+                            </Fragment>
                         )
                     })
             }

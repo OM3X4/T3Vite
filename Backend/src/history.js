@@ -1,6 +1,7 @@
 import express from 'express'
 import { PrismaClient } from '@prisma/client'
 import authenticateJWT from './middleware/AuthenticateUser.js';
+import { decrypt } from './utils/crypto.js';
 
 
 const prisma = new PrismaClient();
@@ -32,7 +33,7 @@ router.get('/chats', authenticateJWT, async (req, res) => {
     try {
         const user = req.user
 
-        if(!user){
+        if (!user) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
@@ -92,7 +93,7 @@ router.get("/chat/:chatId", authenticateJWT, async (req, res) => {
 
 })
 
-router.get("/user" , authenticateJWT , async (req , res) => {
+router.get("/user", authenticateJWT, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             select: {
@@ -102,20 +103,68 @@ router.get("/user" , authenticateJWT , async (req , res) => {
                 createdAt: true,
                 inchatname: true,
                 moreinfo: true,
-                job: true
+                job: true,
+                apiKeyHash: true
             },
             where: {
                 email: req.user.email
             }
         })
-        res.status(200).json(user)
+
+        // const responseOpenRouter = await fetch("https://openrouter.ai/api/v1/auth/key" , {
+        //     headers: {
+        //         "Authorization": `Bearer ${decrypt(user.apiKeyHash)}`,
+        //         "Content-Type": "application/json"
+        //     }
+        // })
+        // const result = await responseOpenRouter.json();
+
+        const reponseCredit = await fetch("https://openrouter.ai/api/v1/credits", {
+            headers: {
+                "Authorization": `Bearer ${decrypt(user.apiKeyHash)}`,
+                "Content-Type": "application/json"
+            }
+        })
+        const resultCredit = await reponseCredit.json()
+        if (resultCredit.data) {
+            return res.status(200).json({
+                name: user.name,
+                imageUrl: user.imageUrl,
+                inchatname: user.inchatname,
+                email: user.email,
+                createdAt: user.createdAt,
+                job: user.job,
+                moreinfo: user.moreinfo,
+                openrouterdata: {
+                    isfreetier: resultCredit.data.total_credits <= 0,
+                    usage: resultCredit.data.total_usage,
+                    credit: resultCredit.data.total_credits
+                }
+            })
+        } else {
+            return res.status(200).json({
+                name: user.name,
+                imageUrl: user.imageUrl,
+                inchatname: user.inchatname,
+                email: user.email,
+                createdAt: user.createdAt,
+                job: user.job,
+                moreinfo: user.moreinfo,
+                openrouterdata: {
+                    isfreetier: 0,
+                    usage: 0,
+                    credit: 0
+                }
+            })
+        }
+
     } catch (err) {
         console.log(err)
         res.status(500).json({ error: 'Internal server error' });
     }
 })
 
-router.post("/user" , authenticateJWT , async (req , res) => {
+router.post("/user", authenticateJWT, async (req, res) => {
 
     if (!req.user?.email) return res.status(401).json({ error: "Unauthorized" });
 
@@ -137,7 +186,7 @@ router.post("/user" , authenticateJWT , async (req , res) => {
     }
 })
 
-router.post('/branch' ,authenticateJWT , async (req , res) => {
+router.post('/branch', authenticateJWT, async (req, res) => {
     try {
         const messageId = req.body.messageid;
         const message = await prisma.message.findUnique({
@@ -160,7 +209,7 @@ router.post('/branch' ,authenticateJWT , async (req , res) => {
                 userId: message.chat.userId,
                 messages: {
                     createMany: {
-                        data: message.chat.messages.filter(m => m.createdAt <= message.createdAt).map(m => ({ content: m.content, role: m.role , createdAt: m.createdAt }))
+                        data: message.chat.messages.filter(m => m.createdAt <= message.createdAt).map(m => ({ content: m.content, role: m.role, createdAt: m.createdAt }))
 
                     }
                 }
@@ -168,7 +217,7 @@ router.post('/branch' ,authenticateJWT , async (req , res) => {
         })
         res.json({ chatid: newChat.id })
 
-    }catch(err){
+    } catch (err) {
         console.log(err)
         res.status(500).json({ error: 'Internal server error' });
     }

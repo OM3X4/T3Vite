@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "./supabaseClient";
 
 async function getChats(chatId : any){
+    if(typeof chatId != "string") {
+        return
+    }
 
     const { data } = await supabase.auth.getSession()
 

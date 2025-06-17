@@ -207,7 +207,7 @@ router.post("/memorize", authenticateJWT, async (req, res) => {
 
 
         const response = await openai.chat.completions.create({
-            model: "mistralai/mixtral-8x7b-instruct",
+            model: "deepseek/deepseek-r1-0528-qwen3-8b:free", // Default to a free model if not specified
             messages: [
                 {
                     role: "system",

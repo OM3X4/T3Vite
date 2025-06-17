@@ -20,7 +20,7 @@ async function getUserData() {
     }
 
     const res = await response.json()
-
+    console.log(res)
     return res
 }
 

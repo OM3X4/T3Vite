@@ -22,6 +22,7 @@ model User {
   inchatname  String?
   job         String?
   moreinfo    String?
+  memorymodel String?  @default("openai/gpt-4o-mini")
   chats       Chat[]
   createdAt   DateTime @default(now())
 }
