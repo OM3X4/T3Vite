@@ -50,7 +50,7 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
         <>
             {
                 message.role === "user" ?
-                    <div className="flex items-center gap-3 text-text-primaryme mb-3 mt-15 flex-row-reverse animation-slide-up">
+                    <div className="flex items-center gap-3 text-text-primaryme mb-3 flex-row-reverse animation-slide-up">
                         <img src={userData?.imageUrl} alt="" referrerPolicy="no-referrer" className="w-7 rounded-full" />
                         <h1 className="text-xl">You</h1>
                         <h1 className="mr-10 text-xs text-text-mutedme">{MessageDateFormatter(message.createdAt)}</h1>
@@ -65,7 +65,7 @@ const ChatMessage = React.memo(({ message }: { message: any }) => {
             <div
                 key={message.id}
                 className={clsx("text-text-primaryme space-y-10 chat-item break-words", {
-                    "bg-surface-backgroundme brightness-150 p-3 pb-0 rounded-2xl self-end lg:max-w-[75%]": message.role === "user",
+                    "bg-borderme px-3 rounded-2xl self-end lg:max-w-[75%]": message.role === "user",
                     "lg:max-w-[90%]": message.role === "assistant",
                 })}
                 style={{ animationDelay: `0.5s` }}
