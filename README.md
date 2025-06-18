@@ -1,74 +1,104 @@
 # oAI Chat – t3.chat Clone
 
-A full-featured, open-source AI chat app inspired by [t3.chat](https://t3.gg/chat).
+A full-featured, open-source AI chat application inspired by [t3.chat](https://t3.gg/chat), built with modern technologies and packed with advanced features.
 
 ## 🔑 Features
-- 🤖 Chat with multiple AI models (OpenRouter)
-- 🔐 Supabase Auth + sync
-- 🔁 Chat history
-- 🌱 Branching chats
-- 🧠 Memory & personalization
-- 🔑 BYOK (Bring Your Own Key)
 
-## ⚙️ Stack
-- Frontend: Vite + React + Tailwind
-- Backend: Express.js on Railway
-- DB: Supabase + Neon.tech
-- Hosting: Netlify (Frontend), Railway (API)
+- 🤖 Chat with multiple AI models via OpenRouter
+- 🔐 Authentication using Supabase (Google sign-in supported)
+- 💬 Persistent chat history with syncing
+- 🌱 Branching chat conversations
+- 🧠 Personalized memory for user context
+- 🔑 BYOK (Bring Your Own API Key) support
 
-## 🚀 Try It Live
-👉 [oaichat.netlify.app](https://oaichat.netlify.app)
+## ⚙️ Tech Stack
 
+- **Frontend:** Vite + React + TailwindCSS
+- **Backend:** Express.js (hosted on Railway)
+- **Database:** Supabase + Neon.tech
+- **Hosting:** Netlify (Frontend) + Railway (API)
 
-🚀 Deployment
+## 🚀 Live Demo
 
-Follow these steps to set up and run the project locally:
-1. Clone the Repository
+👉 Try it here: [oaichat.netlify.app](https://oaichat.netlify.app)
 
-git clone https://github.com/OM3X4/oAI.git .
+---
 
-2. Set Up Supabase
+## 🛠️ Local Development Setup
 
-    Create a Supabase project
+### 1. Clone the Repository
 
-    Enable Google Authentication
+```bash
+git clone https://github.com/OM3X4/oAI.git
+cd oAI
+```
 
-    Retrieve the following values:
+### 2. Supabase Setup
 
-        JWT_SECRET → Found in Supabase Project Settings → API → JWT Secret
+- Create a new project on [Supabase](https://supabase.com)
+- Enable **Google Authentication** under Authentication > Providers
+- Retrieve the following values:
 
-        SUPABASE_URL and SUPABASE_ANON_KEY → Found in API Settings
+  - `SUPABASE_URL` and `SUPABASE_ANON_KEY`: Found in Project Settings → API
+  - `JWT_SECRET`: Found in Project Settings → API → JWT Settings
 
-3. Backend Setup
+### 3. Backend Setup
 
-Go to the Backend folder and create a .env file:
+Navigate to the `backend` directory and create a `.env` file:
 
+```env
 # .env (Backend)
 DATABASE_URL=your_postgres_ipv4_connection_string
 JWT_SECRET=your_supabase_jwt_secret
 KEY_HASH_SECRET=your_32_byte_base64_encoded_key
+```
 
-Then run:
+Generate a valid 32-byte Base64 key using Node.js:
 
+```js
+console.log(require('crypto').randomBytes(32).toString('base64'));
+```
+
+Install dependencies and initialize Prisma:
+
+```bash
+cd backend
 npm install
 npx prisma generate
 npx prisma migrate dev --name init
 npm run dev
+```
 
-4. Frontend Setup
+### 4. Frontend Setup
 
-Navigate to the Client folder and create a .env file:
+Navigate to the `client` directory and create a `.env` file:
 
+```env
 # .env (Client)
-VITE_API_URL=http://localhost:PORT  # Replace with your backend port
-VITE_SUPABASE_PROJECT_URL=https://xyzcompany.supabase.co
+VITE_API_URL=http://localhost:PORT              # Replace with your backend port
+VITE_SUPABASE_PROJECT_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your_anon_key_here
+```
 
-Then run:
+Then start the development server:
 
+```bash
+cd client
 npm install
 npm run dev
+```
 
-5. Final Backend Config
+### 5. CORS Configuration
 
-In Backend/index.js, update the CORS origin whitelist or app config to include the frontend URL (e.g. http://localhost:5173 or whatever your frontend is running on).
+In `backend/index.js`, ensure CORS is correctly configured to allow the frontend origin:
+
+```js
+const corsOptions = {
+  origin: ["http://localhost:4000", "https://oaichat.netlify.app"],
+  credentials: true
+};
+```
+
+---
+
+Happy building! 🚀
