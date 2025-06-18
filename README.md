@@ -14,9 +14,9 @@ A full-featured, open-source AI chat application inspired by [t3.chat](https://t
 ## ⚙️ Tech Stack
 
 - **Frontend:** Vite + React + TailwindCSS
-- **Backend:** Express.js (hosted on Railway)
-- **Database:** Supabase + Neon.tech
-- **Hosting:** Netlify (Frontend) + Railway (API)
+- **Backend:** Express.js + Prisma
+- **Database:** Supabase(Auth) + Neon.tech
+- **Hosting:** Netlify (Frontend) + AWS (API)
 
 ## 🚀 Live Demo
 
