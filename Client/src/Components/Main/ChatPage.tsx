@@ -172,11 +172,11 @@ function ChatPage() {
 
 
     function handleSend() {
-        setIsLoadingNewMessage(true)
+        if (isLoadingNewMessage) return;
         if (message === '') {
-            setIsLoadingNewMessage(false)
             return;
         }
+        setIsLoadingNewMessage(true)
 
         const userMessage = {
             id: crypto.randomUUID(),

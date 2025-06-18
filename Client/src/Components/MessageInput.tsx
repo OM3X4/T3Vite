@@ -15,7 +15,7 @@ function MessageInput({ isLoadingNewMessage, handleMessageSent, setModelProvider
                             placeholder='Ask anything'
                             value={message}
                             onKeyDown={(e: any) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
+                                if (e.key === 'Enter' && !e.shiftKey && !isLoadingNewMessage) {
                                     e.preventDefault()
                                     handleMessageSent()
                                 }
