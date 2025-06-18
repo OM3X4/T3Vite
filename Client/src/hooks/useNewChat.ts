@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "./supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 async function CreateNewChat() {
 
@@ -17,9 +18,13 @@ async function CreateNewChat() {
 }
 
 export default function useNewChat() {
+
+    const navigate = useNavigate()
+
     return useMutation({
         mutationFn: () => CreateNewChat(),
-        onSuccess: () => {
+        onSuccess: (data) => {
+            navigate(`/c/${data.chatid}`)
         },
         onError: () => {
             console.log("Error creating new chat")

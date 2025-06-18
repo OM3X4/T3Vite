@@ -129,10 +129,8 @@ function ChatPage() {
 
     const { mutate: sendMessageToBackend } = useSendMessage(
         (data: any) => {
-            const tempIdResponse = crypto.randomUUID();
-
             const tempResponse = {
-                id: tempIdResponse,
+                id:  data.id,
                 role: "assistant",
                 content: data.message,
                 createdAt: new Date().toISOString(),

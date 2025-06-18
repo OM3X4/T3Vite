@@ -3,6 +3,9 @@ import { supabase } from "./supabaseClient";
 import { toast } from "sonner";
 
 async function branchChat(messageId : any) {
+
+    console.log("branching chat with messageId: ", messageId)
+
     const { data } = await supabase.auth.getSession()
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/branch/` , {
@@ -14,7 +17,8 @@ async function branchChat(messageId : any) {
         body: JSON.stringify({ messageid: messageId })
     })
     if (!response.ok){
-        toast.error("Something went wrong in delete")
+        toast.error(response.statusText || "Failed to branch chat");
+        throw new Error("Failed to branch chat");
     }
     return response.json();
 }

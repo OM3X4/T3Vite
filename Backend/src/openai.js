@@ -36,7 +36,6 @@ router.post("/", authenticateJWT, async (req, res) => {
 
     const systemPrompt = `
             You are a helpful, conversational AI assistant called "oAI".
-            The platform you work inside is made by Omar Emad.
 
             ${typeof user.job == "string" ? `You're chatting with someone who prefers to be called "${user.inchatname}".` : ""}
 
@@ -102,22 +101,38 @@ router.post("/", authenticateJWT, async (req, res) => {
         }
 
 
-        await prisma.message.createMany({
-            data: [
-                {
-                    content: userMessages.at(-1).content || '',
-                    role: "user",
-                    chatId: chatId,
-                },
-                {
-                    content: response.choices[0].message.content,
-                    role: "assistant",
-                    chatId: chatId,
-                }
-            ]
-        })
+        // await prisma.message.createMany({
+        //     data: [
+        //         {
+        //             content: userMessages.at(-1).content || '',
+        //             role: "user",
+        //             chatId: chatId,
+        //         },
+        //         {
+        //             content: response.choices[0].message.content,
+        //             role: "assistant",
+        //             chatId: chatId,
+        //         }
+        //     ]
+        // })
 
-        res.json({ message: response.choices[0].message.content })
+        const userMessage = await prisma.message.create({
+            data: {
+                content: userMessages.at(-1).content || '',
+                role: "user",
+                chatId: chatId,
+            },
+        });
+
+        const assistantMessage = await prisma.message.create({
+            data: {
+                content: response.choices[0].message.content,
+                role: "assistant",
+                chatId: chatId,
+            },
+        });
+
+        res.json({ message: response.choices[0].message.content , id: assistantMessage.id })
     } catch (error) {
         console.log("error : ", error)
         // Check OpenAI/OpenRouter style auth errors
@@ -184,7 +199,7 @@ router.post("/memorize", authenticateJWT, async (req, res) => {
         **Existing User Information (for context, do not repeat or contradict this):**
         ${user.moreinfo}
 
-        ${ typeof user.inchatname == "string" && user.inchatname != "" ? `The user's name is: "${user.inchatname}".` : "" }
+        ${typeof user.inchatname == "string" && user.inchatname != "" ? `The user's name is: "${user.inchatname}".` : ""}
 
         **Instructions:**
         From the new message, extract clear, factual details. Do not try to guess implied meanings or deduce information from context. Ignore anything that is vague, ambiguous, or merely hinted at.
