@@ -115,7 +115,7 @@ function Settings() {
                         <p className="text-xs text-text-lowme mt-2">You will need an OpenRouter key to chat , No key yet? <a className="text-primaryme" href='https://openrouter.ai/' target='_blank'>Don't have one</a></p>
                     </div>
                     {
-                        userData.openrouterdata?.apiKey ?
+                        userData.openrouterdata ?
                         <>
                             <div className="mt-5">
                                 <p className="text-sm text-text-mutedme">Account Tier</p>
