@@ -111,13 +111,22 @@ router.get("/user", authenticateJWT, async (req, res) => {
             }
         })
 
-        // const responseOpenRouter = await fetch("https://openrouter.ai/api/v1/auth/key" , {
-        //     headers: {
-        //         "Authorization": `Bearer ${decrypt(user.apiKeyHash)}`,
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        // const result = await responseOpenRouter.json();
+        if (!user.apiKeyHash) {
+            return res.status(200).json({
+                name: user.name,
+                imageUrl: user.imageUrl,
+                inchatname: user.inchatname,
+                email: user.email,
+                createdAt: user.createdAt,
+                job: user.job,
+                moreinfo: user.moreinfo,
+                openrouterdata: {
+                    isfreetier: 0,
+                    usage: 0,
+                    credit: 0
+                }
+            })
+        }
 
         const reponseCredit = await fetch("https://openrouter.ai/api/v1/credits", {
             headers: {
