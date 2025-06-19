@@ -123,7 +123,7 @@ router.post("/", authenticateJWT, async (req, res) => {
             },
         });
 
-        res.json({ message: response.choices[0].message.content , id: assistantMessage.id })
+        res.json({ message: response.choices[0].message.content, id: assistantMessage.id })
     } catch (error) {
         console.log("error : ", error)
         // Check OpenAI/OpenRouter style auth errors
@@ -185,35 +185,28 @@ router.post("/memorize", authenticateJWT, async (req, res) => {
 
 
         const systemPrompt = `
-        You are an AI assistant tasked with maintaining a user's profile. Your job is to extract and summarize ONLY what the user has clearly stated, without making any assumptions, guesses, or inferences. Focus on extracting directly mentioned facts only.
+        You extract facts about the user from a message.
 
-        **Existing User Information (for context, do not repeat or contradict this):**
-        ${user.moreinfo}
+        If the message clearly contains a personal fact (like age, location, preferences, tools, etc.), return one short, clean sentence.
 
-        ${typeof user.inchatname == "string" && user.inchatname != "" ? `The user's name is: "${user.inchatname}".` : ""}
+        Otherwise, return exactly: [EMPTY]
 
-        **Instructions:**
-        From the new message, extract clear, factual details. Do not try to guess implied meanings or deduce information from context. Ignore anything that is vague, ambiguous, or merely hinted at.
+        Do NOT assume or guess. Do NOT include Input/Output labels, examples, quotes, or extra characters. Return only the clean sentence or [EMPTY].
 
-        **Include only the following types of explicitly stated info:**
-        - Personal Details: (e.g., "My name is Omar", "I'm 17 years old")
-        - Preferences: (e.g., "I like JavaScript", "I prefer dark mode")
-        - Current Context: (e.g., "I'm building a typing website")
+        Here are examples of what to keep in mind:
+        - "I use React and Supabase" → User uses React and Supabase
+        - "How do I make a website with Next.js?" → [EMPTY]
+        - "أنا من الشرقية وبحب البرمجة" → User is from Sharqia and likes programming
+        - "const user = supabase.auth.getUser()" → [EMPTY]
+        - "بحب الوضع الفاتح ومبستحملش الغامق" → User prefers light mode and dislikes dark mode
 
-        **DO NOT:**
-        - Infer emotions or motivations unless clearly stated
-        - Summarize beyond what’s written
-        - Add opinions or speculative data
-        - Rephrase or beautify the user's original points
-
-        **Output Format:**
-        Write a concise paragraph summarizing the clear facts from the message for storing in the user’s profile.
-        `;
+        These are just examples to guide your thinking. You must not repeat or mimic them in your output.
+        `
 
 
 
         const response = await openai.chat.completions.create({
-            model: "deepseek/deepseek-r1-0528-qwen3-8b:free", // Default to a free model if not specified
+            model: "mistralai/mistral-nemo:free", // Default to a free model if not specified
             messages: [
                 {
                     role: "system",
@@ -224,20 +217,25 @@ router.post("/memorize", authenticateJWT, async (req, res) => {
                     content: messageContent
                 }
             ],
+            max_completion_tokens: 30, // Limit to a short response
             temperature: 0.1, // Using a low temperature for more predictable, factual output
         });
 
 
-        const summary = response.choices?.[0]?.message?.content;
-        if (!summary) {
+        const output = response.choices?.[0]?.message?.content;
+        const summary = output.trim() === "[EMPTY]" ? "" : output.trim();
+
+        if (!output) {
             return res.status(500).json({ error: "LLM did not return a valid summary." });
         }
 
         // 5. Save the summary to `moreinfo`
-        await prisma.user.update({
-            where: { email: user.email },
-            data: { moreinfo: `${user.moreinfo}${summary}` },
-        });
+        if(summary.length > 0){
+            await prisma.user.update({
+                where: { email: user.email },
+                data: { moreinfo: `${user.moreinfo}${summary}.` },
+            });
+        }
 
         res.status(200).json({ message: "Message memorized successfully.", summary });
     } catch (err) {
