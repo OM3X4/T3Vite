@@ -100,22 +100,6 @@ router.post("/", authenticateJWT, async (req, res) => {
             });
         }
 
-
-        // await prisma.message.createMany({
-        //     data: [
-        //         {
-        //             content: userMessages.at(-1).content || '',
-        //             role: "user",
-        //             chatId: chatId,
-        //         },
-        //         {
-        //             content: response.choices[0].message.content,
-        //             role: "assistant",
-        //             chatId: chatId,
-        //         }
-        //     ]
-        // })
-
         const userMessage = await prisma.message.create({
             data: {
                 content: userMessages.at(-1).content || '',
