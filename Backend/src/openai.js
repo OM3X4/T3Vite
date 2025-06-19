@@ -70,20 +70,27 @@ router.post("/", authenticateJWT, async (req, res) => {
             }
         })
 
+        const systemPrompt = `You are a multilingual assistant that generates concise, relevant titles (3–7 words) for chat conversations.
+        You only see the first user message.
+        ⚠️ Do **not** include quotation marks, periods, or any punctuation — just the raw title text.
+        Respond with the title **only**, no explanation, no extra characters.
+        The title must be in the same language as the input.
+        `
+
 
         if (!chat.title) {
             const firstUserMessage = userMessages.find(m => m.role === 'user')?.content;
 
             const titleResponse = await openai.chat.completions.create({
-                model: 'mistralai/mixtral-8x7b-instruct',
+                model: 'mistralai/mistral-nemo:free',
                 messages: [
                     {
                         role: 'system',
-                        content: 'You are a title generator. Given the user\'s first message in a chat with an AI assistant, return a less than 5 words and relevant title. Only return the title. No quotes, no punctuation, no explanation.',
+                        content: systemPrompt
                     },
                     {
                         role: 'user',
-                        content: `First message: "${firstUserMessage}"`,
+                        content: firstUserMessage,
                     },
                 ],
             });
